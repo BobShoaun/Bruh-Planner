@@ -1,0 +1,7 @@
+{
+  "name": "bruh-planner",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
