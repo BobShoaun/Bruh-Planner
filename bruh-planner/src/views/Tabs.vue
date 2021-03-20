@@ -6,12 +6,7 @@
           <ion-icon :icon="triangle" />
           <ion-label>Month</ion-label>
         </ion-tab-button>
-          
-        <ion-tab-button tab="tab2" href="/tabs/tab2">
-          <ion-icon :icon="ellipse" />
-          <ion-label>Week</ion-label>
-        </ion-tab-button>
-        
+
         <ion-tab-button tab="tab3" href="/tabs/tab3">
           <ion-icon :icon="square" />
           <ion-label>List</ion-label>
@@ -23,7 +18,7 @@
 
 <script lang="ts">
 import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonPage } from '@ionic/vue';
-import { ellipse, square, triangle } from 'ionicons/icons';
+import { ellipse, triangle } from 'ionicons/icons';
 
 export default {
   name: 'Tabs',
@@ -31,7 +26,6 @@ export default {
   setup() {
     return {
       ellipse, 
-      square, 
       triangle,
     }
   }
