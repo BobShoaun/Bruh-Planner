@@ -4,7 +4,6 @@
         <ion-item button>Add Course</ion-item>
         <ion-item button>Add Assignment</ion-item>
         <ion-item button>Add Test/Quiz</ion-item>
-        <ion-item lines="none" detail="false" button onClick="dismissPopover()">Close</ion-item>
     </ion-list>
   </ion-content>
 </template>
