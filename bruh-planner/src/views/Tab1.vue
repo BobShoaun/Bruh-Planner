@@ -32,17 +32,18 @@
 			{{ i }}
 		</div>
 	</div>
+	<Dashboard />
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-// import ExploreContainer from '@/components/ExploreContainer.vue';
+import Dashboard from '../components/Dashboard.vue';
 
 export default  {
   name: 'Tab1',
-  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage }
+  components: { Dashboard, IonHeader, IonToolbar, IonTitle, IonContent, IonPage }
 }
 </script>
 
