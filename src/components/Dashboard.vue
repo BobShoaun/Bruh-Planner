@@ -64,7 +64,7 @@
 						data-bs-target="#add-modal"
 						v-on:click="addType = 'testquiz'"
 					>
-						Add Task/Quiz
+						Add Test/Quiz
 					</button>
 				</li>
 			</ul>
