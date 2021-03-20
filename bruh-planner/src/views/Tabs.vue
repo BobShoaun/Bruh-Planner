@@ -18,14 +18,14 @@
 
 <script lang="ts">
 import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonPage } from '@ionic/vue';
-import { ellipse, triangle } from 'ionicons/icons';
+import { square, triangle } from 'ionicons/icons';
 
 export default {
   name: 'Tabs',
   components: { IonLabel, IonTabs, IonTabBar, IonTabButton, IonIcon, IonPage },
   setup() {
     return {
-      ellipse, 
+      square, 
       triangle,
     }
   }
