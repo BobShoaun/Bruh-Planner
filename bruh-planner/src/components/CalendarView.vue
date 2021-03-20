@@ -1,17 +1,5 @@
 <template>
-  <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Month</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Month</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <div class="d-flex justify-content-center mb-3">
+	<div class="d-flex justify-content-center mb-3">
 		<button type="button" class="btn btn-outline-secondary btn-lg">
 			<span class="fa fa-chevron-left"></span>
 		</button>
@@ -32,18 +20,10 @@
 			{{ i }}
 		</div>
 	</div>
-    </ion-content>
-  </ion-page>
 </template>
 
-<script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-// import ExploreContainer from '@/components/ExploreContainer.vue';
-
-export default  {
-  name: 'Tab1',
-  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage }
-}
+<script>
+export default {};
 </script>
 
 <style scoped>
