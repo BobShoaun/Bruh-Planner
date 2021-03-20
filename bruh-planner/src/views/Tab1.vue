@@ -2,49 +2,61 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Month</ion-title>
+        <!-- <ion-title>Calendar</ion-title> -->
       </ion-toolbar>
     </ion-header>
+	
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">Month</ion-title>
+          <ion-title size="large">Calendar</ion-title>
         </ion-toolbar>
       </ion-header>
-      <div class="d-flex justify-content-center mb-3">
-		<button type="button" class="btn btn-outline-secondary btn-lg">
-			<span class="fa fa-chevron-left"></span>
-		</button>
-		<h1 class="text-center display-3 mx-3">March 2021</h1>
-		<button type="button" class="btn btn-outline-secondary btn-lg">
-			<span class="fa fa-chevron-right"></span>
-		</button>
-	</div>
-	<div class="calendar bg-secondary p-2">
-		<h4 class="bg-light text-center overflow-hidden">Sunday</h4>
-		<h4 class="bg-light text-center overflow-hidden">Monday</h4>
-		<h4 class="bg-light text-center overflow-hidden">Tuesday</h4>
-		<h4 class="bg-light text-center overflow-hidden">Wednesday</h4>
-		<h4 class="bg-light text-center overflow-hidden">Thursday</h4>
-		<h4 class="bg-light text-center overflow-hidden">Friday</h4>
-		<h4 class="bg-light text-center overflow-hidden">Saturday</h4>
-		<div v-for="i in 31" :key="i" class="calendar-day bg-light ">
-			{{ i }}
-		</div>
-	</div>
-	<Dashboard />
+		<vue-cal
+			xsmall
+			click-to-navigate
+			:time="false"
+			active-view="month"
+			:disable-views="['years', 'year', 'day']"
+			:min-date="minDate"
+			:max-date="maxDate"
+			style="height: 400px"
+			class="vertical-center">
+		</vue-cal>
+		<!-- fab placed to the bottom end -->
+		<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+			<ion-fab-button @click="openPopover">
+				<ion-icon icon="add"></ion-icon>
+			</ion-fab-button>
+		</ion-fab>
+		<Dashboard />
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-import Dashboard from '../components/Dashboard.vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonFab, IonFabButton, IonIcon, popoverController } from '@ionic/vue';
+import 'vue-cal/dist/i18n/zh-cn.js'
+import 'vue-cal/dist/vuecal.css'
+import VueCal from 'vue-cal';
+import {defineComponent} from 'vue';
+import Popover from '../components/popover.vue'
+import Dashboard from '../components/Dashboard.vue'
 
-export default  {
-  name: 'Tab1',
-  components: { Dashboard, IonHeader, IonToolbar, IonTitle, IonContent, IonPage }
-}
+export default defineComponent({
+	components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, VueCal, IonFab, IonFabButton, IonIcon, Dashboard },
+	methods: {
+		async openPopover(ev: Event) {
+			const popover = await popoverController.create({
+				component: Popover,
+				cssClass: '',
+				event: ev,
+				translucent: true
+			})
+			return popover.present();
+		}
+	}
+})
 </script>
 
 <style scoped>
@@ -59,4 +71,13 @@ export default  {
 .calendar-day {
 	height: 100px;
 }
+
+.vertical-center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
 </style>
