@@ -79,9 +79,15 @@
 			aria-hidden="true"
 		>
 			<div class="modal-dialog modal-dialog-centered">
-				<AddCourse v-if="addType == 'course'" />
-				<AddAssignment v-if="addType == 'assignment'" />
-				<AddTestQuiz v-if="addType == 'testquiz'" />
+				<div class="modal-content">
+					<AddCourse v-if="addType == 'course'" />
+					<AddAssignment v-if="addType == 'assignment'" />
+					<AddTestQuiz v-if="addType == 'testquiz'" />
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">Add to Calendar</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</section>
