@@ -2,7 +2,7 @@
     <ion-page>
         <ion-header>
             <ion-toolbar>
-                <!-- <ion-title>Calendar</ion-title> -->
+                <ion-title>Calendar</ion-title>
             </ion-toolbar>
         </ion-header>
 
