@@ -1,69 +1,73 @@
 <template>
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Add Test/Quiz</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form>
-                <div class="form-group">
-                    <label for="task-name">Name: </label>
-                    <input type="text" class="form-control" id="task-name" placeholder="Ex. CSC209 Quiz" />
-                </div>
-                <div class="form-group">
-                    <label for="select-course">Course*: </label>
-                    <select class="form-control" id="select-course">
-                        <option>Course 1</option>
-                        <option>Course 2</option>
-                        <option>Course 3</option>
-                        <option>Course 4</option>
-                        <option>Course 5</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="select-start">Start Time*: </label>
-                </div>
-                <div class="form-group">
-                    <label for="select-start">End Time*: </label>
-                </div>
-                <div class="form-group">
-                    <label for="select-start">Weight*: </label>
-                    <input type="number" class="form-control" id="select-start" placeholder="0" min="0" max="100" />
-                </div>
-                <div class="form-group">
-                    <label for="select-study">Estimated Time to Study*: </label>
-                    <input type="number" class="form-control" id="select-study" placeholder="0" min="0" />
-                </div>
-                <div class="form-group">
-                    <label for="select-repeat">Repeat*: </label>
-                    <select class="form-control" id="select-repeat">
-                        <option selected>Never</option>
-                        <option>Every day</option>
-                        <option>Every week</option>
-                        <option>Every 2 weeks</option>
-                        <option>Custom</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="select-reminder">Reminder*: </label>
-                    <select class="form-control" id="select-reminder">
-                        <option selected>Never</option>
-                        <option>At time of event</option>
-                        <option>10 minutes before</option>
-                        <option>Custom</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="task-notes">Notes: </label>
-                    <textarea class="form-control" id="task-notes" rows="3"></textarea>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button type="" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Add to Calendar</button>
-        </div>
-    </div>
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Add Test/Quiz</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content :fullscreen="true">
+    <ion-header collapse="condense">
+      <ion-toolbar>
+        <ion-title>Add Test/Quiz</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-item>
+      <ion-label>Name*:</ion-label>
+      <ion-input placeholder="Ex. CSC209 Quiz"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Course*:</ion-label>
+      <ion-select placeholder="Select One">
+        <ion-select-option value="CSC209">CSC209</ion-select-option>
+        <ion-select-option value="CSC318">CSC318</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Start Date*:</ion-label>
+      <ion-datetime display-format="MMMM DD, YYYY" placeholder="Select Date"></ion-datetime>
+      at
+      <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="1990-08-19T07:43Z"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>End Date*:</ion-label>
+      <ion-datetime display-format="MMMM DD, YYYY" placeholder="Select Date"></ion-datetime>
+      at
+      <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="1990-09-19T07:43Z"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>Weight (for one)*:</ion-label>
+      <ion-input type="number" min="0" max="100"></ion-input>%
+    </ion-item>
+    <ion-item>
+      <ion-label>Estimated Time to Study*:</ion-label>
+      <ion-input type="number" min="0" placeholder="   1"></ion-input>
+      hour
+      <ion-input type="number" min="0" max="59" placeholder="  30"></ion-input>
+      mins
+    </ion-item>
+    <ion-item>
+      <ion-label>Repeat:</ion-label>
+      <ion-select placeholder="Never">
+        <ion-select-option>Never</ion-select-option>
+        <ion-select-option>Every day</ion-select-option>
+        <ion-select-option>Every week</ion-select-option>
+        <ion-select-option>Every 2 weeks</ion-select-option>
+        <ion-select-option>Custom</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Reminder:</ion-label>
+      <ion-select placeholder="Never">
+        <ion-select-option>Never</ion-select-option>
+        <ion-select-option>At time of event</ion-select-option>
+        <ion-select-option>10 minutes before</ion-select-option>
+        <ion-select-option>Custom</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Notes:</ion-label>
+      <ion-textarea></ion-textarea>
+    </ion-item>
+  </ion-content>
 </template>
 
 <script>
@@ -72,6 +76,6 @@ export default {};
 
 <style scoped>
 textarea {
-    resize: none;
+  resize: none;
 }
 </style>
