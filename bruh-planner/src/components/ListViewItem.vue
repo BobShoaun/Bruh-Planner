@@ -1,47 +1,69 @@
 <template>
-    <ion-item>
-		<ion-reorder slot="start"></ion-reorder>
-        <ion-label class="ion-text-wrap">
-            <ion-text color="primary">
-                <h1>{{ name }}</h1>
-            </ion-text>
-            <ion-text color="secondary">
-                <p>{{ course }}</p>
-            </ion-text>
-            <p>Estimated time: {{ estimatedTime }} hours</p>
-        </ion-label>
-    </ion-item>
+  <ion-item>
+    <ion-reorder slot="start"></ion-reorder>
+    <ion-label class="ion-text-wrap">
+      <ion-row>
+        <ion-col size="8">
+          <ion-text color="primary">
+            <h1>{{ name }}</h1>
+          </ion-text>
+        </ion-col>
+        <ion-col>
+          Due {{ dueDate }}
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="8">
+          <ion-text color="secondary">
+            <h2>{{ course }}</h2>
+          </ion-text>
+        </ion-col>
+        <ion-col>
+          <p>Weight: {{ weight }}%</p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="10">
+          <p>Estimated Time Remaining: {{ estimatedTime }} hours</p>
+        </ion-col>
+      </ion-row>
+      <ion-range min="0" max="100" step="10" snaps="true" ticks="true" color="secondary">
+        <ion-label slot="start">0%</ion-label>
+        <ion-label slot="end">100%</ion-label>
+      </ion-range>
+    </ion-label>
+  </ion-item>
 </template>
 
 <script>
-import { IonReorder, IonItem } from "@ionic/vue";
-import { reorderThreeOutline } from "ionicons/icons";
-import { defineComponent } from "vue";
+import {IonReorder, IonItem} from "@ionic/vue";
+import {defineComponent} from "vue";
 
 export default defineComponent({
-    components: { IonReorder, IonItem },
-    props: {
-        name: {
-            type: String,
-        },
-        course: {
-            type: String,
-        },
-        estimatedTime: {
-            type: Number,
-        },
-        startTime: {
-            type: String,
-        },
-        endTime: {
-            type: String,
-        },
+  components: {IonReorder, IonItem},
+  props: {
+    name: {
+      type: String,
     },
-    setup() {
-        return {
-            reorderThreeOutline,
-        };
+    course: {
+      type: String,
     },
+    estimatedTime: {
+      type: Number,
+    },
+    dueDate: {
+      type: String,
+    },
+    weight: {
+      type: Number,
+    },
+    startTime: {
+      type: String,
+    },
+    endTime: {
+      type: String,
+    },
+  },
 });
 </script>
 

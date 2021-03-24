@@ -35,7 +35,8 @@
     </ion-item>
     <ion-item>
       <ion-label>Weight (for one)*:</ion-label>
-      <ion-input type="number" min="0" max="100"></ion-input>%
+      <ion-input type="number" min="0" max="100"></ion-input>
+      %
     </ion-item>
     <ion-item>
       <ion-label>Estimated Time to Study*:</ion-label>
@@ -67,6 +68,10 @@
       <ion-label>Notes:</ion-label>
       <ion-textarea></ion-textarea>
     </ion-item>
+    <div class="buttons">
+      <ion-button fill="outline">Cancel</ion-button>
+      <ion-button fill="solid">Add to Calendar</ion-button>
+    </div>
   </ion-content>
 </template>
 
@@ -77,5 +82,9 @@ export default {};
 <style scoped>
 textarea {
   resize: none;
+}
+
+.buttons {
+  padding: 80px;
 }
 </style>
