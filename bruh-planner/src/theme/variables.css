@@ -74,6 +74,15 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+
+  /** courses **/
+  --ion-color-course1: #ffadad;
+  --ion-color-course2: #ffd6a5;
+  --ion-color-course3: #fdffb6;
+  --ion-color-course4: #caffbf;
+  --ion-color-course5: #9bf6ff;
+  --ion-color-course6: #a0c4ff;
+  --ion-color-course7: #bdb2ff;
 }
 
 @media (prefers-color-scheme: dark) {
