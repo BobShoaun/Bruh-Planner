@@ -30,12 +30,12 @@
 </template>
 
 <script lang="ts">
-import {IonPage, IonHeader, IonToolbar, IonTitle, IonReorderGroup, IonContent} from "@ionic/vue";
+import {IonButton, IonContent, IonHeader, IonPage, IonReorderGroup, IonTitle, IonToolbar} from "@ionic/vue";
 import ListItem from "../components/ListViewItem.vue";
 
 export default {
   name: "List",
-  components: {ListItem, IonHeader, IonToolbar, IonTitle, IonContent, IonReorderGroup, IonPage},
+  components: {IonButton, IonContent, IonHeader, IonPage, IonReorderGroup, IonTitle, IonToolbar, ListItem},
   data() {
     return {
       events: [

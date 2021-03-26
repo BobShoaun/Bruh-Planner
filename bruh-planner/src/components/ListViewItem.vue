@@ -8,9 +8,7 @@
             <h1>{{ name }}</h1>
           </ion-text>
         </ion-col>
-        <ion-col>
-          Due {{ dueDate }}
-        </ion-col>
+        <ion-col> Due {{ dueDate }}</ion-col>
       </ion-row>
       <ion-row>
         <ion-col size="8">
@@ -36,11 +34,11 @@
 </template>
 
 <script>
-import {IonReorder, IonItem} from "@ionic/vue";
+import {IonCol, IonItem, IonLabel, IonRange, IonReorder, IonRow, IonText} from "@ionic/vue";
 import {defineComponent} from "vue";
 
 export default defineComponent({
-  components: {IonReorder, IonItem},
+  components: {IonCol, IonItem, IonLabel, IonRange, IonReorder, IonRow, IonText},
   props: {
     name: {
       type: String,

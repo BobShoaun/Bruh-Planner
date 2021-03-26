@@ -37,25 +37,25 @@
 
 <script lang="ts">
 import {
-  IonPage,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonContent,
   IonFab,
   IonFabButton,
+  IonHeader,
   IonIcon,
-  popoverController,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  popoverController
 } from "@ionic/vue";
 import {addOutline} from "ionicons/icons";
 import "vue-cal/dist/vuecal.css";
 import VueCal from "vue-cal";
 import {defineComponent} from "vue";
-import Popover from "../components/Popover.vue";
-import {events} from "../database/db"
+import Popover from "../components/popover.vue";
+import {events} from "../database/db";
 
 export default defineComponent({
-  components: {IonHeader, IonToolbar, IonTitle, IonContent, IonPage, VueCal, IonFab, IonFabButton, IonIcon},
+  components: {IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar, VueCal},
   methods: {
     async openPopover(ev: Event) {
       const popover = await popoverController.create({

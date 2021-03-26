@@ -15,30 +15,66 @@
       <ion-input placeholder="Ex. CSC318"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Professor *:</ion-label>
+      <ion-label>Professor:</ion-label>
       <ion-input></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>Office Hours:</ion-label>
-      <ion-input></ion-input>
+      <ion-input placeholder="No office hours yet..."></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>Lectures:</ion-label>
-      <ion-input></ion-input>
+      <ion-input placeholder="No lectures yet..."></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>Notes:</ion-label>
-      <ion-textarea></ion-textarea>
+      <ion-textarea rows="4"></ion-textarea>
     </ion-item>
-    <div class="buttons">
-      <ion-button fill="outline">Cancel</ion-button>
+    <ion-list class="buttons">
+      <ion-button fill="outline" v-on:click="closeModal()">Cancel</ion-button>
       <ion-button fill="solid">Add to Calendar</ion-button>
-    </div>
+    </ion-list>
   </ion-content>
 </template>
 
 <script>
-export default {};
+import {
+  IonButton,
+  IonContent,
+  IonHeader,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonTextarea,
+  IonTitle,
+  IonToolbar
+} from "@ionic/vue";
+import {defineComponent} from "vue";
+
+export default defineComponent({
+  name: "AddCourse",
+  components: {
+    IonButton,
+    IonContent,
+    IonHeader,
+    IonInput,
+    IonItem,
+    IonLabel,
+    IonList,
+    IonTextarea,
+    IonTitle,
+    IonToolbar
+  },
+  props: {
+    close: {type: Function},
+  },
+  methods: {
+    closeModal() {
+      this.close();
+    },
+  },
+});
 </script>
 
 <style scoped>
@@ -47,6 +83,7 @@ textarea {
 }
 
 .buttons {
-  padding: 80px;
+  padding-top: 5vh;
+  text-align: center;
 }
 </style>

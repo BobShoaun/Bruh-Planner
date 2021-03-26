@@ -25,13 +25,13 @@
       <ion-label>Start Date*:</ion-label>
       <ion-datetime display-format="MMMM DD, YYYY" placeholder="Select Date"></ion-datetime>
       at
-      <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="1990-08-19T07:43Z"></ion-datetime>
+      <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="15:00:15Z"></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label>End Date*:</ion-label>
       <ion-datetime display-format="MMMM DD, YYYY" placeholder="Select Date"></ion-datetime>
       at
-      <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="1990-09-19T07:43Z"></ion-datetime>
+      <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="15:00:15Z"></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label>Weight (for one)*:</ion-label>
@@ -66,17 +66,59 @@
     </ion-item>
     <ion-item>
       <ion-label>Notes:</ion-label>
-      <ion-textarea></ion-textarea>
+      <ion-textarea rows="4"></ion-textarea>
     </ion-item>
-    <div class="buttons">
-      <ion-button fill="outline">Cancel</ion-button>
+    <ion-list class="buttons">
+      <ion-button fill="outline" v-on:click="closeModal()">Cancel</ion-button>
       <ion-button fill="solid">Add to Calendar</ion-button>
-    </div>
+    </ion-list>
   </ion-content>
 </template>
 
 <script>
-export default {};
+import {
+  IonButton,
+  IonContent,
+  IonDatetime,
+  IonHeader,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonSelect,
+  IonSelectOption,
+  IonTextarea,
+  IonTitle,
+  IonToolbar
+} from "@ionic/vue";
+import {defineComponent} from "vue";
+
+export default defineComponent({
+  name: "AddTestQuiz",
+  components: {
+    IonButton,
+    IonContent,
+    IonDatetime,
+    IonHeader,
+    IonInput,
+    IonItem,
+    IonLabel,
+    IonList,
+    IonSelect,
+    IonSelectOption,
+    IonTextarea,
+    IonTitle,
+    IonToolbar
+  },
+  props: {
+    close: {type: Function},
+  },
+  methods: {
+    closeModal() {
+      this.close();
+    },
+  },
+});
 </script>
 
 <style scoped>
@@ -85,6 +127,7 @@ textarea {
 }
 
 .buttons {
-  padding: 80px;
+  padding-top: 5vh;
+  text-align: center;
 }
 </style>
