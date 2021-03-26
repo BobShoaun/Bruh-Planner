@@ -6,7 +6,7 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content :fullscreen="true">
+    <ion-content class="no-scroll" :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
           <ion-title size="large">Calendar</ion-title>
@@ -51,7 +51,7 @@ import {addOutline} from "ionicons/icons";
 import "vue-cal/dist/vuecal.css";
 import VueCal from "vue-cal";
 import {defineComponent} from "vue";
-import Popover from "../components/popover.vue";
+import Popover from "../components/Popover.vue";
 import {events} from "../database/db";
 
 export default defineComponent({
@@ -111,35 +111,42 @@ export default defineComponent({
 }
 
 .vuecal__event {
-  color: var(--ion-color-primary-contrast);
   font-size: 15px;
+  font-weight: 600;
 }
 
 .vuecal__event.course1 {
+  color: var(--ion-color-course1-text);
   background-color: var(--ion-color-course1);
 }
 
 .vuecal__event.course2 {
+  color: var(--ion-color-course2-text);
   background-color: var(--ion-color-course2);
 }
 
 .vuecal__event.course3 {
+  color: var(--ion-color-course3-text);
   background-color: var(--ion-color-course3);
 }
 
 .vuecal__event.course4 {
+  color: var(--ion-color-course4-text);
   background-color: var(--ion-color-course4);
 }
 
 .vuecal__event.course5 {
+  color: var(--ion-color-course5-text);
   background-color: var(--ion-color-course5);
 }
 
 .vuecal__event.course6 {
+  color: var(--ion-color-course6-text);
   background-color: var(--ion-color-course6);
 }
 
 .vuecal__event.course7 {
+  color: var(--ion-color-course7-text);
   background-color: var(--ion-color-course7);
 }
 

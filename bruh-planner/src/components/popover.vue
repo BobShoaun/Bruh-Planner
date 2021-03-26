@@ -1,9 +1,9 @@
 <template>
-  <ion-content class="ion-padding">
-    <ion-list mode="ios">
-      <ion-item button v-on:click="openCourse()">Add Course</ion-item>
-      <ion-item button v-on:click="openAssignment()">Add Assignment</ion-item>
-      <ion-item button v-on:click="openTestQuiz()">Add Test/Quiz</ion-item>
+  <ion-content class="ion-padding no-scroll">
+    <ion-list>
+      <ion-item v-on:click="openCourse()">Add Course</ion-item>
+      <ion-item v-on:click="openAssignment()">Add Assignment</ion-item>
+      <ion-item lines="none" v-on:click="openTestQuiz()">Add Test/Quiz</ion-item>
     </ion-list>
   </ion-content>
 </template>

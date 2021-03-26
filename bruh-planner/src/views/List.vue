@@ -70,7 +70,7 @@ import {
 import {addOutline} from "ionicons/icons";
 import {defineComponent} from "vue";
 import ListItem from "../components/ListItem.vue";
-import Popover from "../components/popover.vue";
+import Popover from "../components/Popover.vue";
 import {listevents} from "@/database/db";
 
 export default defineComponent({

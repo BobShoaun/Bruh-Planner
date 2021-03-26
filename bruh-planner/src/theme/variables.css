@@ -78,11 +78,18 @@ http://ionicframework.com/docs/theming/ */
   /** courses **/
   --ion-color-course1: #ffadad;
   --ion-color-course2: #ffd6a5;
-  --ion-color-course3: #fdffb6;
+  --ion-color-course3: #f9faac;
   --ion-color-course4: #caffbf;
   --ion-color-course5: #9bf6ff;
   --ion-color-course6: #a0c4ff;
   --ion-color-course7: #bdb2ff;
+  --ion-color-course1-text: #E1536D;
+  --ion-color-course2-text: #DE955A;
+  --ion-color-course3-text: #dcbc6c;
+  --ion-color-course4-text: #39DB39;
+  --ion-color-course5-text: #00BBFA;
+  --ion-color-course6-text: #3575FF;
+  --ion-color-course7-text: #5F47FF;
 }
 
 @media (prefers-color-scheme: dark) {

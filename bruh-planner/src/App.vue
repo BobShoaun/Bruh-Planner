@@ -16,3 +16,9 @@ export default defineComponent({
   }
 });
 </script>
+
+<style>
+.no-scroll {
+  --overflow: hidden;
+}
+</style>
