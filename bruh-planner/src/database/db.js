@@ -54,3 +54,27 @@ export const events = [
         class: "course1",
     },
 ];
+
+export const listevents = [
+    {
+        name: "Quiz 1",
+        course: "CSC222",
+        estTime: 2,
+        dueDate: "March 19",
+        weight: 4,
+    },
+    {
+        name: "Test 3",
+        course: "CSC900",
+        estTime: 8,
+        dueDate: "March 30",
+        weight: 20,
+    },
+    {
+        name: "Assignment 22",
+        course: "CSC318",
+        estTime: 10,
+        dueDate: "April 2",
+        weight: 12,
+    },
+];

@@ -16,7 +16,7 @@
           xsmall
           click-to-navigate
           active-view="month"
-          :disable-views="['years', 'day']"
+          :disable-views="['years', 'year', 'day']"
           :time-from="8 * 60"
           :time-to="24 * 60"
           todayButton

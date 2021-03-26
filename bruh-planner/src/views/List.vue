@@ -11,63 +11,69 @@
           <ion-title size="large">List</ion-title>
         </ion-toolbar>
       </ion-header>
-      <section>
-        <ion-button expand="full">Custom Sort</ion-button>
-        <ion-reorder-group @ionItemReorder="reorderPriority($event)" :disabled="false">
-          <ListItem
-              v-for="(event, index) in events"
-              :key="index"
-              :name="event.name"
-              :course="event.course"
-              :estimatedTime="event.estTime"
-              :dueDate="event.dueDate"
-              :weight="event.weight"
-          />
-        </ion-reorder-group>
-      </section>
+      <ion-button expand="full">Custom Sort</ion-button>
+      <ion-reorder-group @ionItemReorder="reorderPriority($event)" :disabled="false">
+        <ListItem
+            v-for="(event, index) in events"
+            :key="index"
+            :name="event.name"
+            :course="event.course"
+            :estimatedTime="event.estTime"
+            :dueDate="event.dueDate"
+            :weight="event.weight"
+        />
+      </ion-reorder-group>
+      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button @click="openPopover">
+          <ion-icon :icon="addOutline"/>
+        </ion-fab-button>
+      </ion-fab>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import {IonButton, IonContent, IonHeader, IonPage, IonReorderGroup, IonTitle, IonToolbar} from "@ionic/vue";
+import {
+  IonButton, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonPage, IonReorderGroup, IonTitle, IonToolbar,
+  popoverController
+} from "@ionic/vue";
+import {addOutline} from "ionicons/icons";
+import {defineComponent} from "vue";
 import ListItem from "../components/ListViewItem.vue";
+import Popover from "../components/popover.vue";
+import {listevents} from "../database/db";
 
-export default {
-  name: "List",
-  components: {IonButton, IonContent, IonHeader, IonPage, IonReorderGroup, IonTitle, IonToolbar, ListItem},
-  data() {
-    return {
-      events: [
-        {
-          name: "Quiz 1",
-          course: "CSC222",
-          estTime: 2,
-          dueDate: "March 19",
-          weight: 4,
-        },
-        {
-          name: "Test 3",
-          course: "CSC900",
-          estTime: 8,
-          dueDate: "March 30",
-          weight: 20,
-        },
-        {
-          name: "Assignment 22",
-          course: "CSC318",
-          estTime: 10,
-          dueDate: "April 2",
-          weight: 12,
-        },
-      ],
-    };
+export default defineComponent({
+  components: {
+    IonButton,
+    IonContent,
+    IonFab,
+    IonFabButton,
+    IonHeader,
+    IonIcon,
+    IonPage,
+    IonReorderGroup,
+    IonTitle,
+    IonToolbar,
+    ListItem
+  },
+  methods: {
+    async openPopover(ev: Event) {
+      const popover = await popoverController.create({
+        component: Popover,
+        event: ev,
+      });
+      return popover.present();
+    },
   },
   setup() {
     const reorderPriority = (e: CustomEvent) => {
       e.detail.complete();
     };
-    return {reorderPriority};
+    return {addOutline, reorderPriority};
   },
-};
+  data: () => ({
+    events: listevents,
+  }),
+});
 </script>
