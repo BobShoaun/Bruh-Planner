@@ -22,10 +22,10 @@
       </ion-row>
       <ion-row>
         <ion-col size="10">
-          <p>Estimated Time Remaining: {{ estimatedTime }} hours</p>
+          <p>Estimated Time Remaining: <span ref="estimatedTime"></span> hours</p>
         </ion-col>
       </ion-row>
-      <ion-range min="0" max="100" step="10" snaps="true" ticks="true" color="secondary">
+      <ion-range min="0" max="100" step="10" snaps="true" ticks="true" @ionChange="calcProgress($event)">
         <ion-label slot="start">0%</ion-label>
         <ion-label slot="end">100%</ion-label>
       </ion-range>
@@ -60,6 +60,15 @@ export default defineComponent({
     },
     endTime: {
       type: String,
+    },
+  },
+  mounted() {
+    this.$refs.estimatedTime.innerText = this.estimatedTime.toFixed(1);
+  },
+  methods: {
+    calcProgress(e) {
+      const estimatedTime = this.estimatedTime - (e.detail.value/100 * this.estimatedTime)
+      this.$refs.estimatedTime.innerText = estimatedTime.toFixed(1)
     },
   },
 });
