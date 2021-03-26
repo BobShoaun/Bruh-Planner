@@ -77,4 +77,11 @@ export const listevents = [
         dueDate: "April 2",
         weight: 12,
     },
+    {
+        name: "Quiz",
+        course: "BIO120",
+        estTime: 0.75,
+        dueDate: "April 13",
+        weight: 1,
+    },
 ];

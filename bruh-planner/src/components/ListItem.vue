@@ -22,10 +22,19 @@
       </ion-row>
       <ion-row>
         <ion-col size="10">
-          <p>Estimated Time Remaining: <span ref="estimatedTime"></span> hours</p>
+          <p>Estimated Time Remaining:</p>
+          <p><span ref="estHrs"></span> hours <span ref="estMins"></span> minutes</p>
         </ion-col>
       </ion-row>
-      <ion-range min="0" max="100" step="10" snaps="true" ticks="true" @ionChange="calcProgress($event)">
+      <ion-range
+          ref="progressBar"
+          min="0"
+          :max="estimatedTime * 60"
+          step="15"
+          snaps="true"
+          ticks="false"
+          @ionChange="calcProgress($event)"
+      >
         <ion-label slot="start">0%</ion-label>
         <ion-label slot="end">100%</ion-label>
       </ion-range>
@@ -38,6 +47,7 @@ import {IonCol, IonItem, IonLabel, IonRange, IonReorder, IonRow, IonText} from "
 import {defineComponent} from "vue";
 
 export default defineComponent({
+  name: "ListItem",
   components: {IonCol, IonItem, IonLabel, IonRange, IonReorder, IonRow, IonText},
   props: {
     name: {
@@ -63,12 +73,18 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.$refs.estimatedTime.innerText = this.estimatedTime.toFixed(1);
+    this.$refs.estHrs.innerText = Math.trunc(this.estimatedTime);
+    this.$refs.estMins.innerText = ((this.estimatedTime % 1) * 60).toFixed(0);
   },
   methods: {
     calcProgress(e) {
-      const estimatedTime = this.estimatedTime - (e.detail.value/100 * this.estimatedTime)
-      this.$refs.estimatedTime.innerText = estimatedTime.toFixed(1)
+      const progress = e.detail.value;
+      if (progress == this.estimatedTime * 60) {
+        console.log("completed task!");
+      }
+      const estimatedTime = (this.estimatedTime * 60 - progress) / 60;
+      this.$refs.estHrs.innerText = Math.trunc(estimatedTime);
+      this.$refs.estMins.innerText = ((estimatedTime % 1) * 60).toFixed(0);
     },
   },
 });
