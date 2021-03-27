@@ -4,7 +4,7 @@
       <ion-title>Add Assignment</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-content :fullscreen="true">
+  <ion-content class="no-scroll" :fullscreen="true">
     <ion-header collapse="condense">
       <ion-toolbar>
         <ion-title>Add Assignment</ion-title>
@@ -12,36 +12,43 @@
     </ion-header>
     <ion-item>
       <ion-label>Name*:</ion-label>
-      <ion-input placeholder="Ex. CSC318 Assignment 3"></ion-input>
+      <ion-input v-model="name" placeholder="Ex. Assignment 3"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>Course*:</ion-label>
-      <ion-select placeholder="Select One">
-        <ion-select-option value="CSC209">CSC209</ion-select-option>
-        <ion-select-option value="CSC318">CSC318</ion-select-option>
+      <ion-select v-model="course" placeholder="Select One">
+        <ion-select-option v-for="course in courses" :key="course.name" :value="course.name">
+          {{ course.name }}
+        </ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>Due Date*:</ion-label>
-      <ion-datetime display-format="MMMM DD, YYYY" placeholder="Select Date"></ion-datetime>
-      at
-      <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="15:00:15Z"></ion-datetime>
+      <ion-datetime v-model="dueDate" display-format="MMMM DD, YYYY"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>Due Time*:</ion-label>
+      <ion-datetime v-model="dueTime" display-format="h:mm A" picker-format="h:mm A"></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label>Weight (for one)*:</ion-label>
-      <ion-input type="number" min="0" max="100"></ion-input>
+      <ion-input v-model="weight" type="number" min="0" max="100"></ion-input>
       %
     </ion-item>
     <ion-item>
-      <ion-label>Estimated Time to Complete*:</ion-label>
-      <ion-input type="number" min="0" placeholder="   1"></ion-input>
-      hour
-      <ion-input type="number" min="0" max="59" placeholder="  30"></ion-input>
-      mins
+      Estimated Time to Complete*:
+      <ion-col size="3">
+        <ion-input v-model="estTimeHrs" type="number" min="0" placeholder="1"></ion-input>
+        hours
+      </ion-col>
+      <ion-col size="3">
+        <ion-input v-model="estTimeMins" type="number" min="1" max="59" placeholder="30"></ion-input>
+        minutes
+      </ion-col>
     </ion-item>
     <ion-item>
       <ion-label>Repeat:</ion-label>
-      <ion-select placeholder="Never">
+      <ion-select v-model="repeat" placeholder="Never">
         <ion-select-option>Never</ion-select-option>
         <ion-select-option>Every day</ion-select-option>
         <ion-select-option>Every week</ion-select-option>
@@ -51,7 +58,7 @@
     </ion-item>
     <ion-item>
       <ion-label>Reminder:</ion-label>
-      <ion-select placeholder="Never">
+      <ion-select v-model="reminder" placeholder="Never">
         <ion-select-option>Never</ion-select-option>
         <ion-select-option>At time of event</ion-select-option>
         <ion-select-option>10 minutes before</ion-select-option>
@@ -60,18 +67,20 @@
     </ion-item>
     <ion-item>
       <ion-label>Notes:</ion-label>
-      <ion-textarea rows="4"></ion-textarea>
+      <ion-textarea v-model="notes" rows="4"></ion-textarea>
     </ion-item>
     <ion-list class="buttons">
       <ion-button fill="outline" v-on:click="closeModal()">Cancel</ion-button>
-      <ion-button fill="solid">Add to Calendar</ion-button>
+      <ion-button fill="solid" v-on:click="addAssignment()">Add to Calendar</ion-button>
     </ion-list>
   </ion-content>
 </template>
 
 <script>
 import {
+  alertController,
   IonButton,
+  IonCol,
   IonContent,
   IonDatetime,
   IonHeader,
@@ -83,14 +92,16 @@ import {
   IonSelectOption,
   IonTextarea,
   IonTitle,
-  IonToolbar
+  IonToolbar,
 } from "@ionic/vue";
 import {defineComponent} from "vue";
+import {courses} from "@/database/db";
 
 export default defineComponent({
   name: "AddAssignment",
   components: {
     IonButton,
+    IonCol,
     IonContent,
     IonDatetime,
     IonHeader,
@@ -102,7 +113,7 @@ export default defineComponent({
     IonSelectOption,
     IonTextarea,
     IonTitle,
-    IonToolbar
+    IonToolbar,
   },
   props: {
     close: {type: Function},
@@ -111,7 +122,71 @@ export default defineComponent({
     closeModal() {
       this.close();
     },
+    addAssignment() {
+      const dueDate = new Date(this.dueDate).toDateString().toString();
+      const dueTime = new Date(this.dueTime).formatTime();
+      const assignment = {
+        name: this.name,
+        course: this.course,
+        dueDate: dueDate.substr(dueDate.indexOf(" ") + 1),
+        dueTime: dueTime,
+        weight: Number(this.weight),
+        estTimeHrs: Number(this.estTimeHrs),
+        estTimeMins: Number(this.estTimeMins),
+        repeat: this.repeat,
+        reminder: this.reminder,
+        notes: this.notes,
+      };
+      if (
+          !assignment.name ||
+          !assignment.course ||
+          !assignment.weight ||
+          !assignment.estTimeHrs ||
+          !assignment.estTimeMins
+      ) {
+        this.presentAlert("Empty Fields 😒", "Please fill in all the required fields! 🥺");
+        return;
+      }
+      if (assignment.weight < 0 || assignment.weight > 100) {
+        this.presentAlert("Invalid Weight 😒", "Please enter a valid weight between 0 to 100%! 🥺");
+        return;
+      }
+      if (
+          assignment.estTimeMins > 59 ||
+          assignment.estTimeHrs < 0 ||
+          (assignment.estTimeHrs === 0 && assignment.estTimeMins < 1) ||
+          (assignment.estTimeHrs > 0 && assignment.estTimeMins < 0)
+      ) {
+        this.presentAlert("Invalid Time 😒", "Please enter a valid estimated to complete time! 🥺");
+        return;
+      }
+      this.presentAlert(
+          "Not Implemented 😔",
+          "You filled in all the fields correctly but this doesn't work yet aha 🤭"
+      );
+    },
+    async presentAlert(header, message) {
+      const alert = await alertController.create({
+        header: header,
+        message: message,
+        buttons: ["Got it!"],
+      });
+      return alert.present();
+    },
   },
+  data: () => ({
+    name: "",
+    course: "",
+    dueDate: new Date().toISOString(),
+    dueTime: new Date().toISOString(),
+    weight: "",
+    estTimeHrs: "",
+    estTimeMins: "",
+    repeat: "",
+    reminder: "",
+    notes: "",
+    courses: courses,
+  }),
 });
 </script>
 

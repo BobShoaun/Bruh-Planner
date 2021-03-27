@@ -85,3 +85,12 @@ export const listevents = [
         weight: 1,
     },
 ];
+
+export const courses = [
+    {
+        name: "course1",
+    },
+    {
+        name: "course2",
+    },
+];
