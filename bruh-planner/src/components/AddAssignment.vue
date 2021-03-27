@@ -1,9 +1,4 @@
 <template>
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Add Assignment</ion-title>
-    </ion-toolbar>
-  </ion-header>
   <ion-content class="no-scroll" :fullscreen="true">
     <ion-header collapse="condense">
       <ion-toolbar>
