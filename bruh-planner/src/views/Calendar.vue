@@ -5,7 +5,7 @@
         <ion-title>Calendar</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content class="no-scroll" :fullscreen="true">
+    <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
           <ion-title size="large">Calendar</ion-title>
@@ -36,6 +36,7 @@
       <ion-row>
         <vue-cal
             ref="vuecal"
+            :key="componentKey"
             xsmall
             click-to-navigate
             active-view="month"
@@ -114,6 +115,7 @@ export default defineComponent({
         event: e,
         componentProps: {
           closePopover: () => popoverController.dismiss(),
+          rerender: () => this.refreshCalendar(),
         },
       });
       return popover.present();
@@ -127,6 +129,18 @@ export default defineComponent({
           this.events = events.filter((e) => e.class === course);
       }
     },
+    refreshCalendar() {
+      this.$refs.vuecal.componentKey += 1;
+      console.log(events);
+      console.log("refreshing calendar view");
+    }
+  },
+  watch: {
+    events: function (e) {
+      if (e) {
+        console.log("events change");
+      }
+    }
   },
   setup() {
     return {addOutline, helpCircleOutline};

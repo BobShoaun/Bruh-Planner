@@ -15,15 +15,32 @@ import {defineComponent} from "vue";
 import AddAssignment from "@/components/AddAssignment";
 import AddCourse from "@/components/AddCourse";
 import AddTestQuiz from "@/components/AddTestQuiz";
+import {events} from "@/database/db";
 
 export default defineComponent({
   name: "Popover",
   components: {IonContent, IonItem, IonList},
   props: {
     closePopover: {type: Function},
+    rerender: {type: Function}
   },
   methods: {
+    onChange() {
+      console.log("change")
+    },
     close() {
+      console.log(events, "before")
+      events.push(
+          {
+            start: "2021-03-27 11:00",
+            end: "2021-03-27 15:00",
+            title: "test",
+            class: "course7",
+          }
+      );
+      this.$emit("add-event");
+      this.rerender();
+      console.log(events, "after");
       this.closePopover();
     },
     async openCourse() {
