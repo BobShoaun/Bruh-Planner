@@ -11,25 +11,31 @@
           <ion-title size="large">Calendar</ion-title>
         </ion-toolbar>
       </ion-header>
-      <ion-row>
-        <ion-col size="3" class="show">
-          <ion-label>Show:</ion-label>
-        </ion-col>
-        <ion-col size="9">
-          <ion-select
-              v-model="showCourse"
-              interface="action-sheet"
-              @ionChange="filterCourse($event.detail.value)"
-          >
-            <ion-select-option value="all">All</ion-select-option>
-            <ion-select-option v-for="course in courses" :key="course.name" :value="course.name">
-              {{ course.name }}
-            </ion-select-option>
-          </ion-select>
-        </ion-col>
-      </ion-row>
+      <div>
+        <ion-row>
+          <ion-col size="3" class="vertical-align">
+            <ion-label>Show:</ion-label>
+          </ion-col>
+          <ion-col size="7.5">
+            <ion-select
+                v-model="showCourse"
+                interface="action-sheet"
+                @ionChange="filterCourse($event.detail.value)"
+            >
+              <ion-select-option value="all">All</ion-select-option>
+              <ion-select-option v-for="course in courses" :key="course.name" :value="course.name">
+                {{ course.name }}
+              </ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col class="align-help" size="1.5">
+            <ion-icon size="large" :icon="helpCircleOutline"/>
+          </ion-col>
+        </ion-row>
+      </div>
       <ion-row>
         <vue-cal
+            ref="vuecal"
             xsmall
             click-to-navigate
             active-view="month"
@@ -37,6 +43,7 @@
             :time-from="8 * 60"
             :time-to="24 * 60"
             todayButton
+            :editable-events="{ title: true, drag: false, resize: true, delete: true, create: false }"
             :events="events"
             startWeekOnSunday
             style="height: 450px; width: 100%;"
@@ -50,7 +57,7 @@
       </ion-row>
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button @click="openPopover">
-          <ion-icon :¬icon="addOutline"/>
+          <ion-icon :icon="addOutline"/>
         </ion-fab-button>
       </ion-fab>
     </ion-content>
@@ -59,6 +66,7 @@
 
 <script>
 import {
+  IonChip,
   IonCol,
   IonContent,
   IonFab,
@@ -74,15 +82,16 @@ import {
   IonToolbar,
   popoverController,
 } from "@ionic/vue";
-import {addOutline} from "ionicons/icons";
-import "vue-cal/dist/vuecal.css";
+import {addOutline, helpCircleOutline} from "ionicons/icons";
 import VueCal from "vue-cal";
+import "vue-cal/dist/vuecal.css";
 import {defineComponent} from "vue";
 import Popover from "../components/Popover.vue";
-import {events, courses} from "../database/db";
+import {events, courses} from "@/database/db";
 
 export default defineComponent({
   components: {
+    IonChip,
     IonCol,
     IonContent,
     IonFab,
@@ -115,14 +124,12 @@ export default defineComponent({
           this.events = events;
           break;
         default:
-          this.events = events.filter((e) => e.class == course);
+          this.events = events.filter((e) => e.class === course);
       }
     },
   },
   setup() {
-    return {
-      addOutline,
-    };
+    return {addOutline, helpCircleOutline};
   },
   data: () => ({
     showCourse: "all",
@@ -153,7 +160,7 @@ export default defineComponent({
 }
 
 .vuecal__cell--selected:before {
-  border-color: var(--ion-color-secondary);
+  border-color: var(--ion-color-light-shade);
 }
 
 .vuecal__cell--highlighted:not(.vuecal__cell--has-splits),
@@ -166,7 +173,8 @@ export default defineComponent({
   background-color: var(--ion-color-light);
 }
 
-.vuecal__event, ion-chip {
+.vuecal__event,
+ion-chip {
   font-size: 15px;
   font-weight: 600;
 }
@@ -206,8 +214,12 @@ export default defineComponent({
   background-color: var(--ion-color-course7);
 }
 
-.show {
-  line-height: 200%;
+.vertical-align {
+  padding-top: 15px;
   text-align: center;
+}
+
+.align-help {
+  padding-top: 10px;
 }
 </style>
