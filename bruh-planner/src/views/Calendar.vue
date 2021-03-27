@@ -55,38 +55,9 @@
 					{{ course.name }}
 				</ion-chip>
 			</ion-row>
-			<ion-fab vertical="bottom" horizontal="end" slot="fixed">
-				<ion-fab-button @click="openAdd = !openAdd">
-					<ion-icon :icon="addOutline" />
-				</ion-fab-button>
-			</ion-fab>
-
-			<ion-popover
-				:is-open="openAdd"
-				:backdropDismiss="false"
-				:translucent="true"
-			>
-				<div>
-					<ion-content class="ion-padding no-scroll">
-						<ion-list>
-							<ion-item v-on:click="openAddType('course')">Add Course</ion-item>
-							<ion-item v-on:click="openAddType('assignment')">Add Assignment</ion-item>
-							<ion-item v-on:click="openAddType('testquiz')">Add Test/Quiz</ion-item>
-							<ion-item lines="none" v-on:click="openAdd = false">Close</ion-item>
-						</ion-list>
-					</ion-content>
-				</div>
-			</ion-popover>
-			<ion-row> </ion-row>
+	
 		</ion-content>
 	</ion-page>
-	<AddAssignment
-		v-if="addType == 'assignment'"
-		v-on:add="addAssignment"
-		v-on:close="addType = ''"
-	/>
-	<AddCourse v-if="addType == 'course'" v-on:add="addCourse" v-on:close="addType = ''" />
-	<AddTestQuiz v-if="addType == 'testquiz'" v-on:add="addTestQuiz" v-on:close="addType = ''" />
 </template>
 
 <script>
@@ -113,12 +84,6 @@ import VueCal from "vue-cal";
 import "vue-cal/dist/vuecal.css";
 import { defineComponent } from "vue";
 
-import Popover from "../components/Popover.vue";
-import AddPopover from "../components/AddPopover.vue";
-import AddAssignment from "@/components/AddAssignment";
-import AddCourse from "@/components/AddCourse";
-import AddTestQuiz from "@/components/AddTestQuiz";
-
 import { events, courses } from "@/database/db";
 
 export default defineComponent({
@@ -127,8 +92,6 @@ export default defineComponent({
 			showCourse: "all",
 			events: events,
 			courses: courses,
-			openAdd: false,
-			addType: "",
 		};
 	},
 	components: {
@@ -148,12 +111,6 @@ export default defineComponent({
 		IonToolbar,
 		IonPopover,
 		VueCal,
-		Popover,
-		AddPopover,
-		AddAssignment,
-		AddCourse,
-		AddTestQuiz,
-		AddCourse,
 	},
 	methods: {
 		filterCourse(course) {
@@ -165,29 +122,7 @@ export default defineComponent({
 					this.events = events.filter(e => e.class === course);
 			}
 		},
-		closeAdd() {
-			this.openAdd = false;
-			this.addType = "";
-		},
-		openAddType(type) {
-			this.openAdd = false;
-			this.addType = type;
-		},
-		addAssignment(assignment) {
-			closeAdd();
-			this.events.push({
-				start: "2021-03-27 11:00",
-				end: "2021-03-27 15:00",
-				title: assignment.name,
-				class: assignment.course,
-			});
-		},
-		addCourse(course) {
-			closeAdd();
-		},
-		addTestQuiz(testquiz) {
-			closeAdd();
-		},
+		
 	},
 	setup() {
 		return { addOutline, helpCircleOutline };
