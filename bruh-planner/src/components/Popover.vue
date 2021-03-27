@@ -11,7 +11,6 @@
 
 <script>
 import {IonContent, IonItem, IonList, modalController} from "@ionic/vue";
-import {addOutline} from "ionicons/icons";
 import {defineComponent} from "vue";
 import AddAssignment from "@/components/AddAssignment";
 import AddCourse from "@/components/AddCourse";
@@ -57,11 +56,6 @@ export default defineComponent({
       await this.closePopover();
       return modal.present();
     },
-  },
-  setup() {
-    return {
-      addOutline,
-    };
   },
 });
 </script>

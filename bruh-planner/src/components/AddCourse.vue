@@ -20,11 +20,11 @@
     </ion-item>
     <ion-item>
       <ion-label>Office Hours:</ion-label>
-      <ion-button color="light" strong="true" v-on:click="addOfficeHours()">+</ion-button>
+      <ion-button fill="outline" color="primary" strong="true" v-on:click="addOfficeHours()">+</ion-button>
     </ion-item>
     <ion-item>
       <ion-label>Lectures:</ion-label>
-      <ion-button color="light" strong="true" v-on:click="addLecture()">+</ion-button>
+      <ion-button fill="outline" color="primary" strong="true" v-on:click="addLecture()">+</ion-button>
     </ion-item>
     <ion-item>
       <ion-label>Notes:</ion-label>

@@ -24,21 +24,21 @@
     </ion-item>
     <ion-item>
       <ion-label>Repeat:</ion-label>
-      <ion-select v-model="repeat" placeholder="Never">
-        <ion-select-option>Never</ion-select-option>
-        <ion-select-option>Every day</ion-select-option>
-        <ion-select-option>Every week</ion-select-option>
-        <ion-select-option>Every 2 weeks</ion-select-option>
-        <ion-select-option>Custom</ion-select-option>
+      <ion-select v-model="repeat">
+        <ion-select-option value="never">Never</ion-select-option>
+        <ion-select-option value="every day">Every day</ion-select-option>
+        <ion-select-option value="every week">Every week</ion-select-option>
+        <ion-select-option value="every 2 weeks">Every 2 weeks</ion-select-option>
+        <ion-select-option value="custom">Custom</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>Reminder:</ion-label>
-      <ion-select v-model="reminder" value="never" placeholder="Never">
-        <ion-select-option>Never</ion-select-option>
-        <ion-select-option>At time of event</ion-select-option>
-        <ion-select-option>10 minutes before</ion-select-option>
-        <ion-select-option>Custom</ion-select-option>
+      <ion-select v-model="reminder">
+        <ion-select-option value="never">Never</ion-select-option>
+        <ion-select-option value="at time of event">At time of event</ion-select-option>
+        <ion-select-option value="10 minutes before">10 minutes before</ion-select-option>
+        <ion-select-option value="custom">Custom</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-list class="buttons">
@@ -89,6 +89,7 @@ export default defineComponent({
     },
     addLectures() {
       const date = new Date(this.date).toDateString().toString();
+      console.log("m")
       const startTime = new Date(this.startTime).formatTime();
       const endTime = new Date(this.endTime).formatTime();
       const lecture = {
@@ -128,9 +129,9 @@ export default defineComponent({
   data: () => ({
     date: new Date().toISOString(),
     startTime: new Date().toISOString(),
-    endTime: new Date().toISOString(),
-    repeat: "",
-    reminder: "",
+    endTime: (new Date()).addHours(1).toISOString(),
+    repeat: "never",
+    reminder: "never",
   }),
 });
 </script>

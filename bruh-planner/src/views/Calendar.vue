@@ -12,6 +12,19 @@
           <ion-title size="large">Calendar</ion-title>
         </ion-toolbar>
       </ion-header>
+      <ion-row>
+      <ion-col size="2" style="padding-top: 13px;">
+        <ion-label>Show:</ion-label>
+      </ion-col>
+      <ion-col>
+        <ion-select interface="action-sheet" value="all">
+          <ion-select-option value="all">All</ion-select-option>
+        <ion-select-option v-for="course in courses" :key="course.name" :value="course.name">
+          {{ course.name }}
+        </ion-select-option>
+      </ion-select>
+      </ion-col>
+    </ion-row>
       <vue-cal
           xsmall
           click-to-navigate
@@ -52,7 +65,7 @@ import "vue-cal/dist/vuecal.css";
 import VueCal from "vue-cal";
 import {defineComponent} from "vue";
 import Popover from "../components/Popover.vue";
-import {events} from "../database/db";
+import {events, courses} from "../database/db";
 
 export default defineComponent({
   components: {IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar, VueCal},
@@ -75,6 +88,7 @@ export default defineComponent({
   },
   data: () => ({
     events: events,
+    courses: courses,
   }),
 });
 </script>
