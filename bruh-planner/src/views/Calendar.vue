@@ -36,7 +36,6 @@
 			<ion-row>
 				<vue-cal
 					ref="vuecal"
-					:key="componentKey"
 					xsmall
 					click-to-navigate
 					active-view="month"
@@ -64,9 +63,7 @@
 
 			<ion-popover
 				:is-open="openAdd"
-				css-class="my-custom-class"
 				:backdropDismiss="false"
-				:event="event"
 				:translucent="true"
 			>
 				<div>

@@ -170,10 +170,12 @@ export default defineComponent({
         this.presentAlert("Invalid Time 😒", "Please enter a valid estimated to complete time! 🥺");
         return;
       }
-      this.presentAlert(
-          "Not Implemented 😔",
-          "You filled in all the fields correctly but this doesn't work yet aha 🤭"
-      );
+      // this.presentAlert(
+      //     "Not Implemented 😔",
+      //     "You filled in all the fields correctly but this doesn't work yet aha 🤭"
+      // );
+      this.$emit("add", testquiz);
+
     },
     async presentAlert(header, message) {
       const alert = await alertController.create({
