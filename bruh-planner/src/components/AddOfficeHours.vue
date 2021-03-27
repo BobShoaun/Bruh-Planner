@@ -101,13 +101,12 @@ export default defineComponent({
       if (
           !officeHours.date ||
           !officeHours.startTime ||
-          !officeHours.weight ||
           !officeHours.endTime
       ) {
         this.presentAlert("Empty Fields 😒", "Please fill in all the required fields! 🥺");
         return;
       }
-      if (startTime <= endTime) {
+      if (startTime >= endTime) {
         this.presentAlert("Invalid Time 😒", "The office hours shouldn't end before it even starts! 🤔");
         return;
       }

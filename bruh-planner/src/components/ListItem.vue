@@ -33,7 +33,7 @@
           step="15"
           snaps="true"
           ticks="false"
-          @ionChange="calcProgress($event)"
+          @ionChange="calcProgress($event.detail.value)"
       >
         <ion-label slot="start">0%</ion-label>
         <ion-label slot="end">100%</ion-label>
@@ -78,7 +78,7 @@ export default defineComponent({
   },
   methods: {
     calcProgress(e) {
-      const progress = e.detail.value;
+      const progress = e;
       if (progress == this.estimatedTime * 60) {
         console.log("completed task!");
       }

@@ -53,6 +53,12 @@ export const events = [
         title: "Studio",
         class: "course1",
     },
+    {
+        start: "2021-03-26 9:00",
+        end: "2021-03-26 10:00",
+        title: "Quiz",
+        class: "course2",
+    },
 ];
 
 export const listevents = [

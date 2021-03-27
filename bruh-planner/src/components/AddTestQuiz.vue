@@ -153,7 +153,7 @@ export default defineComponent({
         this.presentAlert("Empty Fields 😒", "Please fill in all the required fields! 🥺");
         return;
       }
-      if (startTime <= endTime) {
+      if (startTime >= endTime) {
         this.presentAlert("Invalid Time 😒", "Your test shouldn't end before it even starts! 🤔");
         return;
       }

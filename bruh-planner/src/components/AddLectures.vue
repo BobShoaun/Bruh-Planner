@@ -89,7 +89,6 @@ export default defineComponent({
     },
     addLectures() {
       const date = new Date(this.date).toDateString().toString();
-      console.log("m")
       const startTime = new Date(this.startTime).formatTime();
       const endTime = new Date(this.endTime).formatTime();
       const lecture = {
@@ -102,13 +101,12 @@ export default defineComponent({
       if (
           !lecture.date ||
           !lecture.startTime ||
-          !lecture.weight ||
           !lecture.endTime
       ) {
         this.presentAlert("Empty Fields 😒", "Please fill in all the required fields! 🥺");
         return;
       }
-      if (startTime <= endTime) {
+      if (startTime >= endTime) {
         this.presentAlert("Invalid Time 😒", "The lecture shouldn't end before it even starts! 🤔");
         return;
       }

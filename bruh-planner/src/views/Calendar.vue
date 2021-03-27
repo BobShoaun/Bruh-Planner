@@ -5,7 +5,6 @@
         <ion-title>Calendar</ion-title>
       </ion-toolbar>
     </ion-header>
-
     <ion-content class="no-scroll" :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
@@ -13,11 +12,15 @@
         </ion-toolbar>
       </ion-header>
       <ion-row>
-        <ion-col size="2" style="padding-top: 13px;">
+        <ion-col size="3" class="show">
           <ion-label>Show:</ion-label>
         </ion-col>
-        <ion-col>
-          <ion-select interface="action-sheet" value="all">
+        <ion-col size="9">
+          <ion-select
+              v-model="showCourse"
+              interface="action-sheet"
+              @ionChange="filterCourse($event.detail.value)"
+          >
             <ion-select-option value="all">All</ion-select-option>
             <ion-select-option v-for="course in courses" :key="course.name" :value="course.name">
               {{ course.name }}
@@ -25,30 +28,36 @@
           </ion-select>
         </ion-col>
       </ion-row>
-      <vue-cal
-          xsmall
-          click-to-navigate
-          active-view="month"
-          :disable-views="['years', 'year', 'day']"
-          :time-from="8 * 60"
-          :time-to="24 * 60"
-          todayButton
-          :events="events"
-          startWeekOnSunday
-          style="height: 450px; width: 100%;"
-          class="vertical-center"
-      >
-      </vue-cal>
+      <ion-row>
+        <vue-cal
+            xsmall
+            click-to-navigate
+            active-view="month"
+            :disable-views="['years', 'year', 'day']"
+            :time-from="8 * 60"
+            :time-to="24 * 60"
+            todayButton
+            :events="events"
+            startWeekOnSunday
+            style="height: 450px; width: 100%;"
+        >
+        </vue-cal>
+      </ion-row>
+      <ion-row>
+        <ion-chip v-for="course in courses" :key="course.name" :class="course.name">
+          {{ course.name }}
+        </ion-chip>
+      </ion-row>
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button @click="openPopover">
-          <ion-icon :icon="addOutline"/>
+          <ion-icon :¬icon="addOutline"/>
         </ion-fab-button>
       </ion-fab>
     </ion-content>
   </ion-page>
 </template>
 
-<script lang="ts">
+<script>
 import {
   IonCol,
   IonContent,
@@ -63,7 +72,7 @@ import {
   IonRow,
   IonTitle,
   IonToolbar,
-  popoverController
+  popoverController,
 } from "@ionic/vue";
 import {addOutline} from "ionicons/icons";
 import "vue-cal/dist/vuecal.css";
@@ -87,18 +96,27 @@ export default defineComponent({
     IonRow,
     IonTitle,
     IonToolbar,
-    VueCal
+    VueCal,
   },
   methods: {
-    async openPopover(ev: Event) {
+    async openPopover(e) {
       const popover = await popoverController.create({
         component: Popover,
-        event: ev,
+        event: e,
         componentProps: {
           closePopover: () => popoverController.dismiss(),
         },
       });
       return popover.present();
+    },
+    filterCourse(course) {
+      switch (course) {
+        case "all":
+          this.events = events;
+          break;
+        default:
+          this.events = events.filter((e) => e.class == course);
+      }
     },
   },
   setup() {
@@ -107,6 +125,7 @@ export default defineComponent({
     };
   },
   data: () => ({
+    showCourse: "all",
     events: events,
     courses: courses,
   }),
@@ -147,51 +166,48 @@ export default defineComponent({
   background-color: var(--ion-color-light);
 }
 
-.vuecal__event {
+.vuecal__event, ion-chip {
   font-size: 15px;
   font-weight: 600;
 }
 
-.vuecal__event.course1 {
+.course1 {
   color: var(--ion-color-course1-text);
   background-color: var(--ion-color-course1);
 }
 
-.vuecal__event.course2 {
+.course2 {
   color: var(--ion-color-course2-text);
   background-color: var(--ion-color-course2);
 }
 
-.vuecal__event.course3 {
+.course3 {
   color: var(--ion-color-course3-text);
   background-color: var(--ion-color-course3);
 }
 
-.vuecal__event.course4 {
+.course4 {
   color: var(--ion-color-course4-text);
   background-color: var(--ion-color-course4);
 }
 
-.vuecal__event.course5 {
+.course5 {
   color: var(--ion-color-course5-text);
   background-color: var(--ion-color-course5);
 }
 
-.vuecal__event.course6 {
+.course6 {
   color: var(--ion-color-course6-text);
   background-color: var(--ion-color-course6);
 }
 
-.vuecal__event.course7 {
+.course7 {
   color: var(--ion-color-course7-text);
   background-color: var(--ion-color-course7);
 }
 
-.vertical-center {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
+.show {
+  line-height: 200%;
+  text-align: center;
 }
 </style>
