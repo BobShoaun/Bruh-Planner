@@ -31,7 +31,7 @@
       <ion-textarea v-model="notes" rows="4"></ion-textarea>
     </ion-item>
     <ion-list class="buttons">
-      <ion-button fill="outline" v-on:click="closeModal()">Cancel</ion-button>
+      <ion-button fill="outline" v-on:click="$emit('close')">Cancel</ion-button>
       <ion-button fill="solid" v-on:click="addCourse()">Add to Calendar</ion-button>
     </ion-list>
   </ion-content>

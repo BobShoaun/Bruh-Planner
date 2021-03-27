@@ -1,68 +1,95 @@
 <template>
-  <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Calendar</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Calendar</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <div>
-        <ion-row>
-          <ion-col size="3" class="vertical-align">
-            <ion-label>Show:</ion-label>
-          </ion-col>
-          <ion-col size="7.5">
-            <ion-select
-                v-model="showCourse"
-                interface="action-sheet"
-                @ionChange="filterCourse($event.detail.value)"
-            >
-              <ion-select-option value="all">All</ion-select-option>
-              <ion-select-option v-for="course in courses" :key="course.name" :value="course.name">
-                {{ course.name }}
-              </ion-select-option>
-            </ion-select>
-          </ion-col>
-          <ion-col class="align-help" size="1.5">
-            <ion-icon size="large" :icon="helpCircleOutline"/>
-          </ion-col>
-        </ion-row>
-      </div>
-      <ion-row>
-        <vue-cal
-            ref="vuecal"
-            :key="componentKey"
-            xsmall
-            click-to-navigate
-            active-view="month"
-            :disable-views="['years', 'year', 'day']"
-            :time-from="8 * 60"
-            :time-to="24 * 60"
-            todayButton
-            :editable-events="{ title: true, drag: false, resize: true, delete: true, create: false }"
-            :events="events"
-            startWeekOnSunday
-            style="height: 450px; width: 100%;"
-        >
-        </vue-cal>
-      </ion-row>
-      <ion-row>
-        <ion-chip v-for="course in courses" :key="course.name" :class="course.name">
-          {{ course.name }}
-        </ion-chip>
-      </ion-row>
-      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button @click="openPopover">
-          <ion-icon :icon="addOutline"/>
-        </ion-fab-button>
-      </ion-fab>
-    </ion-content>
-  </ion-page>
+	<ion-page>
+		<ion-header>
+			<ion-toolbar>
+				<ion-title>Calendar</ion-title>
+			</ion-toolbar>
+		</ion-header>
+		<ion-content :fullscreen="true">
+			<ion-header collapse="condense">
+				<ion-toolbar>
+					<ion-title size="large">Calendar</ion-title>
+				</ion-toolbar>
+			</ion-header>
+			<div>
+				<ion-row>
+					<ion-col size="3" class="vertical-align">
+						<ion-label>Show:</ion-label>
+					</ion-col>
+					<ion-col size="7.5">
+						<ion-select
+							v-model="showCourse"
+							interface="action-sheet"
+							@ionChange="filterCourse($event.detail.value)"
+						>
+							<ion-select-option value="all">All</ion-select-option>
+							<ion-select-option v-for="course in courses" :key="course.name" :value="course.name">
+								{{ course.name }}
+							</ion-select-option>
+						</ion-select>
+					</ion-col>
+					<ion-col class="align-help" size="1.5">
+						<ion-icon size="large" :icon="helpCircleOutline" />
+					</ion-col>
+				</ion-row>
+			</div>
+			<ion-row>
+				<vue-cal
+					ref="vuecal"
+					:key="componentKey"
+					xsmall
+					click-to-navigate
+					active-view="month"
+					:disable-views="['years', 'year', 'day']"
+					:time-from="8 * 60"
+					:time-to="24 * 60"
+					todayButton
+					:editable-events="{ title: true, drag: false, resize: true, delete: true, create: false }"
+					:events="events"
+					startWeekOnSunday
+					style="height: 450px; width: 100%;"
+				>
+				</vue-cal>
+			</ion-row>
+			<ion-row>
+				<ion-chip v-for="course in courses" :key="course.name" :class="course.name">
+					{{ course.name }}
+				</ion-chip>
+			</ion-row>
+			<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+				<ion-fab-button @click="openAdd = !openAdd">
+					<ion-icon :icon="addOutline" />
+				</ion-fab-button>
+			</ion-fab>
+
+			<ion-popover
+				:is-open="openAdd"
+				css-class="my-custom-class"
+				:backdropDismiss="false"
+				:event="event"
+				:translucent="true"
+			>
+				<div>
+					<ion-content class="ion-padding no-scroll">
+						<ion-list>
+							<ion-item v-on:click="openAddType('course')">Add Course</ion-item>
+							<ion-item v-on:click="openAddType('assignment')">Add Assignment</ion-item>
+							<ion-item v-on:click="openAddType('testquiz')">Add Test/Quiz</ion-item>
+							<ion-item lines="none" v-on:click="openAdd = false">Close</ion-item>
+						</ion-list>
+					</ion-content>
+				</div>
+			</ion-popover>
+			<ion-row> </ion-row>
+		</ion-content>
+	</ion-page>
+	<AddAssignment
+		v-if="addType == 'assignment'"
+		v-on:add="addAssignment"
+		v-on:close="addType = ''"
+	/>
+	<AddCourse v-if="addType == 'course'" v-on:add="addCourse" v-on:close="addType = ''" />
+	<AddTestQuiz v-if="addType == 'testquiz'" v-on:add="addTestQuiz" v-on:close="addType = ''" />
 </template>
 
 <script>
@@ -82,77 +109,92 @@ import {
 	IonRow,
 	IonTitle,
 	IonToolbar,
-	popoverController,
+	IonPopover,
 } from "@ionic/vue";
 import { addOutline, helpCircleOutline } from "ionicons/icons";
 import VueCal from "vue-cal";
 import "vue-cal/dist/vuecal.css";
 import { defineComponent } from "vue";
+
 import Popover from "../components/Popover.vue";
+import AddPopover from "../components/AddPopover.vue";
+import AddAssignment from "@/components/AddAssignment";
+import AddCourse from "@/components/AddCourse";
+import AddTestQuiz from "@/components/AddTestQuiz";
+
 import { events, courses } from "@/database/db";
 
-import Test from "../components/Test";
-
 export default defineComponent({
-  components: {
-    IonChip,
-    IonCol,
-    IonContent,
-    IonFab,
-    IonFabButton,
-    IonHeader,
-    IonIcon,
-    IonLabel,
-    IonPage,
-    IonSelect,
-    IonSelectOption,
-    IonRow,
-    IonTitle,
-    IonToolbar,
-    VueCal,
-  },
-  methods: {
-    async openPopover(e) {
-      const popover = await popoverController.create({
-        component: Popover,
-        event: e,
-        componentProps: {
-          closePopover: () => popoverController.dismiss(),
-          rerender: () => this.refreshCalendar(),
-        },
-      });
-      return popover.present();
-    },
-    filterCourse(course) {
-      switch (course) {
-        case "all":
-          this.events = events;
-          break;
-        default:
-          this.events = events.filter((e) => e.class === course);
-      }
-    },
-    refreshCalendar() {
-      this.$refs.vuecal.componentKey += 1;
-      console.log(events);
-      console.log("refreshing calendar view");
-    }
-  },
-  watch: {
-    events: function (e) {
-      if (e) {
-        console.log("events change");
-      }
-    }
-  },
-  setup() {
-    return {addOutline, helpCircleOutline};
-  },
-  data: () => ({
-    showCourse: "all",
-    events: events,
-    courses: courses,
-  }),
+	data() {
+		return {
+			showCourse: "all",
+			events: events,
+			courses: courses,
+			openAdd: false,
+			addType: "",
+		};
+	},
+	components: {
+		IonChip,
+		IonCol,
+		IonContent,
+		IonFab,
+		IonFabButton,
+		IonHeader,
+		IonIcon,
+		IonLabel,
+		IonPage,
+		IonSelect,
+		IonSelectOption,
+		IonRow,
+		IonTitle,
+		IonToolbar,
+		IonPopover,
+		VueCal,
+		Popover,
+		AddPopover,
+		AddAssignment,
+		AddCourse,
+		AddTestQuiz,
+		AddCourse,
+	},
+	methods: {
+		filterCourse(course) {
+			switch (course) {
+				case "all":
+					this.events = events;
+					break;
+				default:
+					this.events = events.filter(e => e.class === course);
+			}
+		},
+		closeAdd() {
+			this.openAdd = false;
+			this.addType = "";
+		},
+		openAddType(type) {
+			this.openAdd = false;
+			this.addType = type;
+		},
+		addAssignment(assignment) {
+			closeAdd();
+			this.events.push({
+				start: "2021-03-27 11:00",
+				end: "2021-03-27 15:00",
+				title: assignment.name,
+				class: assignment.course,
+			});
+		},
+		addCourse(course) {
+			closeAdd();
+		},
+		addTestQuiz(testquiz) {
+			closeAdd();
+		},
+	},
+	setup() {
+		return { addOutline, helpCircleOutline };
+	},
 });
 </script>
 

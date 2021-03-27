@@ -70,7 +70,7 @@
       <ion-textarea v-model="notes" rows="4"></ion-textarea>
     </ion-item>
     <ion-list class="buttons">
-      <ion-button fill="outline" v-on:click="closeModal()">Cancel</ion-button>
+      <ion-button fill="outline" v-on:click="$emit('close')">Cancel</ion-button>
       <ion-button fill="solid" v-on:click="addAssignment()">Add to Calendar</ion-button>
     </ion-list>
   </ion-content>
@@ -164,6 +164,7 @@ export default defineComponent({
           "Not Implemented 😔",
           "You filled in all the fields correctly but this doesn't work yet aha 🤭"
       );
+      this.$emit("add", assignment);
     },
     async presentAlert(header, message) {
       const alert = await alertController.create({
