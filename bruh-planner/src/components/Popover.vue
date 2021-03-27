@@ -3,7 +3,8 @@
     <ion-list>
       <ion-item v-on:click="openCourse()">Add Course</ion-item>
       <ion-item v-on:click="openAssignment()">Add Assignment</ion-item>
-      <ion-item lines="none" v-on:click="openTestQuiz()">Add Test/Quiz</ion-item>
+      <ion-item v-on:click="openTestQuiz()">Add Test/Quiz</ion-item>
+      <ion-item lines="none" v-on:click="close()">Close</ion-item>
     </ion-list>
   </ion-content>
 </template>
@@ -19,7 +20,13 @@ import AddTestQuiz from "@/components/AddTestQuiz";
 export default defineComponent({
   name: "Popover",
   components: {IonContent, IonItem, IonList},
+  props: {
+    closePopover: {type: Function},
+  },
   methods: {
+    close() {
+      this.closePopover();
+    },
     async openCourse() {
       const modal = await modalController.create({
         component: AddCourse,
@@ -27,6 +34,7 @@ export default defineComponent({
           close: () => modalController.dismiss(),
         },
       });
+      await this.closePopover();
       return modal.present();
     },
     async openAssignment() {
@@ -36,6 +44,7 @@ export default defineComponent({
           close: () => modalController.dismiss(),
         },
       });
+      await this.closePopover();
       return modal.present();
     },
     async openTestQuiz() {
@@ -45,6 +54,7 @@ export default defineComponent({
           close: () => modalController.dismiss(),
         },
       });
+      await this.closePopover();
       return modal.present();
     },
   },

@@ -61,6 +61,9 @@ export default defineComponent({
       const popover = await popoverController.create({
         component: Popover,
         event: ev,
+        componentProps: {
+          closePopover: () => popoverController.dismiss(),
+        },
       });
       return popover.present();
     },
