@@ -42,18 +42,16 @@
         </ion-list>
       </div>
       <div v-else>
-        <ion-reorder-group @ionItemReorder="reorderPriority($event)" :disabled="false">
-          <ListItem
-              v-for="(event, index) in pastEvents"
-              :key="index"
-              :name="event.title"
-              :course="event.class"
-              :estimatedTime="event.estTime"
-              :dueDate="event.end"
-              :weight="event.weight"
-              :completed="event.completed"
-          />
-        </ion-reorder-group>
+        <ListItem
+            v-for="(event, index) in pastEvents"
+            :key="index"
+            :name="event.title"
+            :course="event.class"
+            :estimatedTime="event.estTime"
+            :dueDate="event.end"
+            :weight="event.weight"
+            :completed="event.completed"
+        />
         <ion-list class="tasks-end">
           <div v-if="pastEvents.length===0">
             Nothing here yet! 🤩
@@ -130,7 +128,6 @@ export default defineComponent({
       // })
       // // console.log(this.listevents)
       // // console.log(events)
-
     }
   },
   setup() {
