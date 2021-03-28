@@ -5,11 +5,6 @@
     </ion-toolbar>
   </ion-header>
   <ion-content class="no-scroll" :fullscreen="true">
-    <ion-header collapse="condense">
-      <ion-toolbar>
-        <ion-title>Add Test/Quiz</ion-title>
-      </ion-toolbar>
-    </ion-header>
     <ion-item>
       <ion-label>Name*:</ion-label>
       <ion-input v-model="name" placeholder="Ex. Quiz"></ion-input>
@@ -24,15 +19,15 @@
     </ion-item>
     <ion-item>
       <ion-label>Date*:</ion-label>
-      <ion-datetime v-model="date" display-format="MMMM DD, YYYY"></ion-datetime>
+      <ion-datetime v-model="startDate" display-format="MMMM DD, YYYY"></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label>Start Time*:</ion-label>
-      <ion-datetime v-model="startTime" display-format="h:mm A" picker-format="h:mm A"></ion-datetime>
+      <ion-datetime v-model="startDate" display-format="h:mm A" picker-format="h:mm A"></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label>End Time*:</ion-label>
-      <ion-datetime v-model="endTime" display-format="h:mm A" picker-format="h:mm A"></ion-datetime>
+      <ion-datetime v-model="endDate" display-format="h:mm A" picker-format="h:mm A"></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label>Weight (for one)*:</ion-label>
@@ -127,29 +122,23 @@ export default defineComponent({
       this.close();
     },
     addTestQuiz() {
-      const date = new Date(this.date).toDateString().toString();
-      const startTime = new Date(this.startTime).formatTime();
-      const endTime = new Date(this.endTime).formatTime();
+      const startTime = new Date(this.startDate).format("YYYY-MM-DD HH:mm");
+      const endTime = new Date(this.endDate).format("YYYY-MM-DD HH:mm");
       const testquiz = {
-        name: this.name,
-        course: this.course,
-        date: date.substr(date.indexOf(" ") + 1),
-        startTime: startTime,
-        endTime: endTime,
+        start: startTime,
+        end: endTime,
+        title: this.name,
+        class: this.course,
+        type: "testquiz",
         weight: Number(this.weight),
-        estTimeHrs: Number(this.estTimeHrs),
-        estTimeMins: Number(this.estTimeMins),
+        estTime: 0,
         repeat: this.repeat,
         reminder: this.reminder,
         notes: this.notes,
       };
-      if (
-          !testquiz.name ||
-          !testquiz.course ||
-          !testquiz.weight ||
-          !testquiz.estTimeHrs ||
-          !testquiz.estTimeMins
-      ) {
+      const estTimeHrs = Number(this.estTimeHrs);
+      const estTimeMins = Number(this.estTimeMins);
+      if (!testquiz.title || !testquiz.class || !testquiz.weight || !estTimeHrs || !estTimeMins) {
         this.presentAlert("Empty Fields 😒", "Please fill in all the required fields! 🥺");
         return;
       }
@@ -162,18 +151,15 @@ export default defineComponent({
         return;
       }
       if (
-          testquiz.estTimeMins > 59 ||
-          testquiz.estTimeHrs < 0 ||
-          (testquiz.estTimeHrs === 0 && testquiz.estTimeMins < 1) ||
-          (testquiz.estTimeHrs > 0 && testquiz.estTimeMins < 0)
+          estTimeMins > 59 ||
+          estTimeHrs < 0 ||
+          (estTimeHrs === 0 && estTimeMins < 1) ||
+          (estTimeHrs > 0 && estTimeMins < 0)
       ) {
         this.presentAlert("Invalid Time 😒", "Please enter a valid estimated to complete time! 🥺");
         return;
       }
-      // this.presentAlert(
-      //     "Not Implemented 😔",
-      //     "You filled in all the fields correctly but this doesn't work yet aha 🤭"
-      // );
+      testquiz.estTime = estTimeHrs + estTimeMins / 60;
       this.$emit("add", testquiz);
     },
     async presentAlert(header, message) {
@@ -188,9 +174,8 @@ export default defineComponent({
   data: () => ({
     name: "",
     course: "",
-    date: new Date().toISOString(),
-    startTime: new Date().toISOString(),
-    endTime: (new Date()).addHours(1).toISOString(),
+    startDate: new Date().toISOString(),
+    endDate: new Date().addHours(1).toISOString(),
     weight: "",
     estTimeHrs: "",
     estTimeMins: "",

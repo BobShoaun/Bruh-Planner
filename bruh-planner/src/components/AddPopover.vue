@@ -27,29 +27,6 @@ export default defineComponent({
 		rerender: { type: Function },
 	},
 	methods: {
-		onChange() {
-			console.log("change");
-		},
-		close() {
-			console.log(events, "before");
-			// events.push(
-			//     {
-			//       start: "2021-03-27 11:00",
-			//       end: "2021-03-27 15:00",
-			//       title: "test",
-			//       class: "course7",
-			//     }
-			// );
-			this.$emit("add-event", {
-				start: "2021-03-27 11:00",
-				end: "2021-03-27 15:00",
-				title: "test",
-				class: "course7",
-			});
-			// this.rerender();
-			// console.log(events, "after");
-			// this.closePopover();
-		},
 		async openCourse() {
 			const modal = await modalController.create({
 				component: AddCourse,

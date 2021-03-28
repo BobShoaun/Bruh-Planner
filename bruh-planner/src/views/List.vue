@@ -41,11 +41,6 @@
           Nothing here yet! 🤩
         </ion-list>
       </div>
-      <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button @click="openPopover">
-          <ion-icon :icon="addOutline"/>
-        </ion-fab-button>
-      </ion-fab> -->
     </ion-content>
   </ion-page>
 </template>
@@ -54,10 +49,7 @@
 import {
   IonButton,
   IonContent,
-  // IonFab,
-  // IonFabButton,
   IonHeader,
-  // IonIcon,
   IonList,
   IonPage,
   IonReorderGroup,
@@ -65,22 +57,17 @@ import {
   IonSegmentButton,
   IonTitle,
   IonToolbar,
-  // popoverController,
 } from "@ionic/vue";
 import {addOutline} from "ionicons/icons";
 import {defineComponent} from "vue";
 import ListItem from "../components/ListItem.vue";
-// import Popover from "../components/Popover.vue";
 import {listevents} from "@/database/db";
 
 export default defineComponent({
   components: {
     IonButton,
     IonContent,
-    // IonFab,
-    // IonFabButton,
     IonHeader,
-    // IonIcon,
     IonList,
     IonPage,
     IonReorderGroup,
@@ -91,16 +78,6 @@ export default defineComponent({
     ListItem,
   },
   methods: {
-    // async openPopover(ev: Event) {
-    //   const popover = await popoverController.create({
-    //     component: Popover,
-    //     event: ev,
-    //     componentProps: {
-    //       closePopover: () => popoverController.dismiss(),
-    //     },
-    //   });
-    //   return popover.present();
-    // },
     viewUpcomingPast(e: CustomEvent) {
       this.upcoming = e.detail.value != 'past';
     },

@@ -5,11 +5,6 @@
     </ion-toolbar>
   </ion-header>
   <ion-content class="no-scroll" :fullscreen="true">
-    <ion-header collapse="condense">
-      <ion-toolbar>
-        <ion-title>Add Course</ion-title>
-      </ion-toolbar>
-    </ion-header>
     <ion-item>
       <ion-label>Name*:</ion-label>
       <ion-input v-model="name" placeholder="Ex. CSC318"></ion-input>
@@ -105,10 +100,6 @@ export default defineComponent({
         this.presentAlert("Empty Fields 😒", "Please fill in all the required fields! 🥺");
         return;
       }
-      // this.presentAlert(
-      //     "Not Implemented 😔",
-      //     "You filled in all the fields correctly but this doesn't work yet aha 🤭"
-      // );
       this.$emit("add", course);
     },
     async presentAlert(header, message) {
