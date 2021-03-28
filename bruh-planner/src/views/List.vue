@@ -54,7 +54,6 @@
               :completed="event.completed"
           />
         </ion-reorder-group>
-        <!-- else -->
         <ion-list class="tasks-end">
           <div v-if="pastEvents.length===0">
             Nothing here yet! 🤩

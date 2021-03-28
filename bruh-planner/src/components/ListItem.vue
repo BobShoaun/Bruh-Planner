@@ -38,7 +38,7 @@
             ticks="false"
             @ionChange="calcProgress($event.detail.value)"
         >
-          <ion-label v-if="this.completed != this.estimatedTime" slot="start">0%</ion-label>
+          <ion-label v-if="this.completed !== this.estimatedTime" slot="start">0%</ion-label>
           <ion-label v-if="this.completed !== this.estimatedTime" slot="end">100%</ion-label>
         </ion-range>
       </div>
