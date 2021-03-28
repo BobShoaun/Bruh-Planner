@@ -8,7 +8,7 @@
             <h1>{{ name }}</h1>
           </ion-text>
         </ion-col>
-        <ion-col> Due {{ dueDate }}</ion-col>
+        <ion-col> Due <span ref="dueDate"></span></ion-col>
       </ion-row>
       <ion-row>
         <ion-col size="8">
@@ -73,6 +73,10 @@ export default defineComponent({
     },
   },
   mounted() {
+    this.$refs.dueDate.innerText = new Date(this.dueDate).toLocaleDateString('en-US', {
+      day: 'numeric',
+      month: 'short',
+    }).replace(/ /g, ' ');
     this.$refs.estHrs.innerText = Math.trunc(this.estimatedTime);
     this.$refs.estMins.innerText = ((this.estimatedTime % 1) * 60).toFixed(0);
   },

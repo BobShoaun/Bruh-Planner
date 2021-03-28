@@ -25,10 +25,10 @@
           <ListItem
               v-for="(event, index) in events"
               :key="index"
-              :name="event.name"
-              :course="event.course"
+              :name="event.title"
+              :course="event.class"
               :estimatedTime="event.estTime"
-              :dueDate="event.dueDate"
+              :dueDate="event.end"
               :weight="event.weight"
           />
         </ion-reorder-group>
@@ -61,7 +61,7 @@ import {
 import {addOutline} from "ionicons/icons";
 import {defineComponent} from "vue";
 import ListItem from "../components/ListItem.vue";
-import {listevents} from "@/database/db";
+import {events} from "@/database/db";
 
 export default defineComponent({
   components: {
@@ -89,7 +89,7 @@ export default defineComponent({
     return {addOutline, reorderPriority};
   },
   data: () => ({
-    events: listevents,
+    events: events.filter(e => e.type === "testquiz" || e.type === "assignment"),
     upcoming: true,
   }),
 });
