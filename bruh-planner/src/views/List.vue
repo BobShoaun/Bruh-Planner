@@ -23,13 +23,15 @@
         <ion-button expand="full">Custom Sort</ion-button>
         <ion-reorder-group @ionItemReorder="reorderPriority($event)" :disabled="false">
           <ListItem
-              v-for="(event, index) in events"
+              v-for="(event, index) in upcomingEvents"
+              v-on:complete="completeEvent(event)"
               :key="index"
               :name="event.name"
               :course="event.course"
               :estimatedTime="event.estTime"
               :dueDate="event.dueDate"
               :weight="event.weight"
+              :completed="event.completed"
           />
         </ion-reorder-group>
         <ion-list class="tasks-end">
@@ -37,7 +39,20 @@
         </ion-list>
       </div>
       <div v-else>
-        <ion-list class="tasks-end">
+        <ion-reorder-group @ionItemReorder="reorderPriority($event)" :disabled="false">
+          <ListItem
+              v-for="(event, index) in pastEvents"
+              :key="index"
+              :name="event.name"
+              :course="event.course"
+              :estimatedTime="event.estTime"
+              :dueDate="event.dueDate"
+              :weight="event.weight"
+              :completed="event.completed"
+          />
+        </ion-reorder-group>     
+           <!-- else -->
+        <ion-list class="tasks-end" v-if="pastEvents.length==0">
           Nothing here yet! 🤩
         </ion-list>
       </div>
@@ -104,12 +119,29 @@ export default defineComponent({
     viewUpcomingPast(e: CustomEvent) {
       this.upcoming = e.detail.value != 'past';
     },
+    completeEvent(completedEvent) {
+      this.events.forEach(event => {
+        if (completedEvent.name == event.name && completedEvent.course == event.course){
+          event.completed = "true"
+        }
+      })
+      this.upcomingEvents = this.events.filter(event => {
+        return event.completed == "false"
+      })
+      this.pastEvents.push(completedEvent)
+    }
   },
   setup() {
     const reorderPriority = (e: CustomEvent) => {
       e.detail.complete();
     };
-    return {addOutline, reorderPriority};
+    const upcomingEvents = listevents.filter(event => {
+      return event.completed == "false"
+    })
+    const pastEvents = listevents.filter(event => {
+      return event.completed == "true"
+    })
+    return {addOutline, reorderPriority, upcomingEvents, pastEvents};
   },
   data: () => ({
     events: listevents,

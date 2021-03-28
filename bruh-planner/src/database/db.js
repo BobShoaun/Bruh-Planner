@@ -68,6 +68,7 @@ export const listevents = [
         estTime: 2,
         dueDate: "March 19",
         weight: 4,
+        completed: "false",
     },
     {
         name: "Test 3",
@@ -75,6 +76,7 @@ export const listevents = [
         estTime: 8,
         dueDate: "March 30",
         weight: 20,
+        completed: "false",
     },
     {
         name: "Assignment 22",
@@ -82,6 +84,7 @@ export const listevents = [
         estTime: 10,
         dueDate: "April 2",
         weight: 12,
+        completed: "false",
     },
     {
         name: "Quiz",
@@ -89,6 +92,7 @@ export const listevents = [
         estTime: 0.75,
         dueDate: "April 13",
         weight: 1,
+        completed: "false",
     },
 ];
 

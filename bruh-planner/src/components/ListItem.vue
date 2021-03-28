@@ -22,28 +22,32 @@
       </ion-row>
       <ion-row>
         <ion-col size="10">
-          <p>Estimated Time Remaining:</p>
+          <p v-if="this.completed == 'true'">Estimated Time:</p> 
+          <p v-else>Estimated Time Remaining:</p>
           <p><span ref="estHrs"></span> hours <span ref="estMins"></span> minutes</p>
         </ion-col>
       </ion-row>
-      <ion-range
-          ref="progressBar"
-          min="0"
-          :max="estimatedTime * 60"
-          step="15"
-          snaps="true"
-          ticks="false"
-          @ionChange="calcProgress($event.detail.value)"
-      >
-        <ion-label slot="start">0%</ion-label>
-        <ion-label slot="end">100%</ion-label>
-      </ion-range>
+      <div v-if="this.completed == 'false'">
+        <ion-range 
+            v-if="this.completed == 'false'"
+            ref="progressBar"
+            min="0"
+            :max="estimatedTime * 60"
+            step="15"
+            snaps="true"
+            ticks="false"
+            @ionChange="calcProgress($event.detail.value)"
+        >
+          <ion-label v-if="this.completed == 'false'" slot="start">0%</ion-label>
+          <ion-label v-if="this.completed == 'false'" slot="end">100%</ion-label>
+        </ion-range>
+      </div>
     </ion-label>
   </ion-item>
 </template>
 
 <script>
-import {IonCol, IonItem, IonLabel, IonRange, IonReorder, IonRow, IonText} from "@ionic/vue";
+import {IonCol, IonItem, IonLabel, IonRange, IonReorder, IonRow, IonText, alertController} from "@ionic/vue";
 import {defineComponent} from "vue";
 
 export default defineComponent({
@@ -71,6 +75,14 @@ export default defineComponent({
     endTime: {
       type: String,
     },
+    completed: {
+      type: String
+    }
+  },
+  data () {
+    return {
+      completedKey: 0
+    }
   },
   mounted() {
     this.$refs.estHrs.innerText = Math.trunc(this.estimatedTime);
@@ -80,11 +92,33 @@ export default defineComponent({
     calcProgress(e) {
       const progress = e;
       if (progress == this.estimatedTime * 60) {
-        console.log("completed task!");
+        this.presentAlert("Confirm you have completed the task for " + this.name + "!");
       }
       const estimatedTime = (this.estimatedTime * 60 - progress) / 60;
       this.$refs.estHrs.innerText = Math.trunc(estimatedTime);
       this.$refs.estMins.innerText = ((estimatedTime % 1) * 60).toFixed(0);
+    },
+    async presentAlert(header, message) {
+      const alert = await alertController.create({
+        header: header,
+        message: message,
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'secondary',
+          },
+          {
+            text: 'Yes!',
+            handler: () => {
+              this.$emit("complete")
+              this.completedkey += 1
+              console.log('Confirm Okay')
+            },
+          },
+        ]
+      });
+      return alert.present();
     },
   },
 });
