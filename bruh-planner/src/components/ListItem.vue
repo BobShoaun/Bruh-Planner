@@ -22,14 +22,14 @@
       </ion-row>
       <ion-row>
         <ion-col size="10">
-          <p v-if="this.completed == this.estimatedTime">Estimated Time:</p> 
+          <p v-if="this.completed === this.estimatedTime">Estimated Time:</p>
           <p v-else>Estimated Time Remaining:</p>
           <p><span ref="estHrs"></span> hours <span ref="estMins"></span> minutes</p>
         </ion-col>
       </ion-row>
-      <div v-if="this.completed != this.estimatedTime">
+      <div v-if="this.completed !== this.estimatedTime">
         <ion-range 
-            v-if="this.completed != this.estimatedTime"
+            v-if="this.completed !== this.estimatedTime"
             ref="progressBar"
             min="0"
             :max="estimatedTime * 60"
@@ -39,7 +39,7 @@
             @ionChange="calcProgress($event.detail.value)"
         >
           <ion-label v-if="this.completed != this.estimatedTime" slot="start">0%</ion-label>
-          <ion-label v-if="this.completed != this.estimatedTime" slot="end">100%</ion-label>
+          <ion-label v-if="this.completed !== this.estimatedTime" slot="end">100%</ion-label>
         </ion-range>
       </div>
     </ion-label>
@@ -90,7 +90,7 @@ export default defineComponent({
   methods: {
     calcProgress(e) {
       const progress = e;
-      if (progress == this.estimatedTime * 60) {
+      if (progress === this.estimatedTime * 60) {
         this.presentAlert();
       } else {
         this.updateCompletion(progress);
@@ -107,7 +107,6 @@ export default defineComponent({
           {
             text: 'Cancel',
             role: 'cancel',
-            cssClass: 'secondary',
           },
           {
             text: 'Yes!',

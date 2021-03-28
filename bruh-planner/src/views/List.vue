@@ -36,7 +36,9 @@
           />
         </ion-reorder-group>
         <ion-list class="tasks-end">
-          No more tasks! 😊
+          <div v-if="upcomingEvents.length===0">
+            No more tasks! 😊
+          </div>
         </ion-list>
       </div>
       <div v-else>
@@ -51,10 +53,12 @@
               :weight="event.weight"
               :completed="event.completed"
           />
-        </ion-reorder-group>     
-           <!-- else -->
-        <ion-list class="tasks-end" v-if="pastEvents.length==0">
-          Nothing here yet! 🤩
+        </ion-reorder-group>
+        <!-- else -->
+        <ion-list class="tasks-end">
+          <div v-if="pastEvents.length===0">
+            Nothing here yet! 🤩
+          </div>
         </ion-list>
       </div>
     </ion-content>
@@ -99,7 +103,7 @@ export default defineComponent({
     },
     completeEvent(completedEvent) {
       this.listevents.forEach(event => {
-        if (completedEvent.title == event.title && completedEvent.class == event.class){
+        if (completedEvent.title == event.title && completedEvent.class == event.class) {
           event.completed = event.estTime
         }
       })
@@ -112,7 +116,7 @@ export default defineComponent({
     updateCompletion(event, progress) {
       event.completed = progress / 60
     },
-    reorderPriority (e: CustomEvent) {
+    reorderPriority(e: CustomEvent) {
       e.detail.complete();
       // const otherEvents = this.listevents.filter(e => e.type != "testquiz" && e.type != "assignment")
       // this.listevents.splice(0);
