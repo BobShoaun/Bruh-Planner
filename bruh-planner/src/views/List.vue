@@ -100,11 +100,7 @@ export default defineComponent({
     completeEvent(completedEvent) {
       this.listevents.forEach(event => {
         if (completedEvent.title == event.title && completedEvent.class == event.class){
-          // console.log(event)
-          // console.log(event.completed, event.estTime)
           event.completed = event.estTime
-          // console.log(event)
-          // console.log(event.completed, event.estTime)
         }
       })
       this.upcomingEvents = this.listevents.filter(event => {
