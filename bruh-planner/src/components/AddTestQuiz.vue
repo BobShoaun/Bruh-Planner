@@ -4,7 +4,7 @@
       <ion-title>Add Test/Quiz</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-content class="no-scroll" :fullscreen="true">
+  <ion-content :fullscreen="true">
     <ion-item>
       <ion-label>Name*:</ion-label>
       <ion-input v-model="name" placeholder="Ex. Quiz"></ion-input>
@@ -54,6 +54,10 @@
         <ion-select-option value="every 2 weeks">Every 2 weeks</ion-select-option>
         <ion-select-option value="custom">Custom</ion-select-option>
       </ion-select>
+    </ion-item>
+    <ion-item v-if="repeat !== 'never'">
+      <ion-label>End Repeat:</ion-label>
+      <ion-datetime v-model="endRepeat" display-format="MMMM DD, YYYY"></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label>Reminder:</ion-label>
@@ -135,7 +139,7 @@ export default defineComponent({
         repeat: this.repeat,
         reminder: this.reminder,
         notes: this.notes,
-        courses: courses,
+        completed: 0,
       };
       const estTimeHrs = Number(this.estTimeHrs);
       const estTimeMins = Number(this.estTimeMins);
@@ -149,6 +153,13 @@ export default defineComponent({
       }
       if (testquiz.weight < 0 || testquiz.weight > 100) {
         this.presentAlert("Invalid Weight 😒", "Please enter a valid weight between 0 to 100%! 🥺");
+        return;
+      }
+      if (testquiz.repeat !== "never") {
+        this.presentAlert(
+            "Not Implemented 😔",
+            "You filled in all the fields correctly but repeats other than 'Never' aren't supported yet aha 🤭"
+        );
         return;
       }
       if (
@@ -181,6 +192,7 @@ export default defineComponent({
     estTimeHrs: "",
     estTimeMins: "",
     repeat: "never",
+    endRepeat: new Date().addDays(7).toISOString(),
     reminder: "never",
     notes: "",
     courses: courses,

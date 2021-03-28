@@ -32,6 +32,10 @@
         <ion-select-option value="custom">Custom</ion-select-option>
       </ion-select>
     </ion-item>
+    <ion-item v-if="repeat !== 'never'">
+      <ion-label>End Repeat:</ion-label>
+      <ion-datetime v-model="endRepeat" display-format="MMMM DD, YYYY"></ion-datetime>
+    </ion-item>
     <ion-item>
       <ion-label>Reminder:</ion-label>
       <ion-select v-model="reminder">
@@ -110,6 +114,13 @@ export default defineComponent({
         this.presentAlert("Invalid Time 😒", "The lecture shouldn't end before it even starts! 🤔");
         return;
       }
+      if (lecture.repeat !== "never") {
+        this.presentAlert(
+            "Not Implemented 😔",
+            "You filled in all the fields correctly but repeats other than 'Never' aren't supported yet aha 🤭"
+        );
+        return;
+      }
       this.presentAlert(
           "Not Implemented 😔",
           "You filled in all the fields correctly but this doesn't work yet aha 🤭"
@@ -128,6 +139,7 @@ export default defineComponent({
     startDate: new Date().toISOString(),
     endDate: new Date().addHours(1).toISOString(),
     repeat: "never",
+    endRepeat: new Date().addDays(7).toISOString(),
     reminder: "never",
     notes: "",
   }),
