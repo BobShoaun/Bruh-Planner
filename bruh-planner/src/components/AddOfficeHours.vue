@@ -12,15 +12,15 @@
     </ion-header>
     <ion-item>
       <ion-label>Date*:</ion-label>
-      <ion-datetime v-model="date" display-format="MMMM DD, YYYY"></ion-datetime>
+      <ion-datetime v-model="startDate" display-format="MMMM DD, YYYY"></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label>Start Time*:</ion-label>
-      <ion-datetime v-model="startTime" display-format="h:mm A" picker-format="h:mm A"></ion-datetime>
+      <ion-datetime v-model="startDate" display-format="h:mm A" picker-format="h:mm A"></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label>End Time*:</ion-label>
-      <ion-datetime v-model="endTime" display-format="h:mm A" picker-format="h:mm A"></ion-datetime>
+      <ion-datetime v-model="endDate" display-format="h:mm A" picker-format="h:mm A"></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label>Repeat:</ion-label>
@@ -41,6 +41,10 @@
         <ion-select-option value="custom">Custom</ion-select-option>
       </ion-select>
     </ion-item>
+    <ion-item>
+      <ion-label>Notes:</ion-label>
+      <ion-textarea v-model="notes" rows="4"></ion-textarea>
+    </ion-item>
     <ion-list class="buttons">
       <ion-button fill="outline" v-on:click="closeModal()">Cancel</ion-button>
       <ion-button fill="solid" v-on:click="addOfficeHours()">Done</ion-button>
@@ -60,6 +64,7 @@ import {
   IonList,
   IonSelect,
   IonSelectOption,
+  IonTextarea,
   IonTitle,
   IonToolbar,
 } from "@ionic/vue";
@@ -77,6 +82,7 @@ export default defineComponent({
     IonList,
     IonSelect,
     IonSelectOption,
+    IonTextarea,
     IonTitle,
     IonToolbar,
   },
@@ -88,24 +94,18 @@ export default defineComponent({
       this.closeOfficeHours();
     },
     addOfficeHours() {
-      const date = new Date(this.date).toDateString().toString();
-      const startTime = new Date(this.startTime).formatTime();
-      const endTime = new Date(this.endTime).formatTime();
+      const startTime = new Date(this.startDate).format("YYYY-MM-DD HH:mm");
+      const endTime = new Date(this.endDate).format("YYYY-MM-DD HH:mm");
       const officeHours = {
-        date: date.substr(date.indexOf(" ") + 1),
-        startTime: startTime,
-        endTime: endTime,
+        start: startTime,
+        end: endTime,
+        title: "Office Hours",
+        class: "N/A",
+        type: "officehours",
         repeat: this.repeat,
         reminder: this.reminder,
+        notes: this.notes,
       };
-      if (
-          !officeHours.date ||
-          !officeHours.startTime ||
-          !officeHours.endTime
-      ) {
-        this.presentAlert("Empty Fields 😒", "Please fill in all the required fields! 🥺");
-        return;
-      }
       if (startTime >= endTime) {
         this.presentAlert("Invalid Time 😒", "The office hours shouldn't end before it even starts! 🤔");
         return;
@@ -125,11 +125,11 @@ export default defineComponent({
     },
   },
   data: () => ({
-    date: new Date().toISOString(),
-    startTime: new Date().toISOString(),
-    endTime: (new Date()).addHours(1).toISOString(),
+    startDate: new Date().toISOString(),
+    endDate: new Date().addHours(1).toISOString(),
     repeat: "never",
     reminder: "never",
+    notes: "",
   }),
 });
 </script>

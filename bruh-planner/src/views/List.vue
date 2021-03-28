@@ -25,11 +25,12 @@
           <ListItem
               v-for="(event, index) in upcomingEvents"
               v-on:complete="completeEvent(event)"
+              v-on:updateCompletion="updateCompletion(event, $event)"
               :key="index"
-              :name="event.name"
-              :course="event.course"
+              :name="event.title"
+              :course="event.class"
               :estimatedTime="event.estTime"
-              :dueDate="event.dueDate"
+              :dueDate="event.end"
               :weight="event.weight"
               :completed="event.completed"
           />
@@ -43,10 +44,10 @@
           <ListItem
               v-for="(event, index) in pastEvents"
               :key="index"
-              :name="event.name"
-              :course="event.course"
+              :name="event.title"
+              :course="event.class"
               :estimatedTime="event.estTime"
-              :dueDate="event.dueDate"
+              :dueDate="event.end"
               :weight="event.weight"
               :completed="event.completed"
           />
@@ -56,11 +57,6 @@
           Nothing here yet! 🤩
         </ion-list>
       </div>
-      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button @click="openPopover">
-          <ion-icon :icon="addOutline"/>
-        </ion-fab-button>
-      </ion-fab>
     </ion-content>
   </ion-page>
 </template>
@@ -69,10 +65,7 @@
 import {
   IonButton,
   IonContent,
-  IonFab,
-  IonFabButton,
   IonHeader,
-  IonIcon,
   IonList,
   IonPage,
   IonReorderGroup,
@@ -80,22 +73,17 @@ import {
   IonSegmentButton,
   IonTitle,
   IonToolbar,
-  popoverController,
 } from "@ionic/vue";
 import {addOutline} from "ionicons/icons";
 import {defineComponent} from "vue";
 import ListItem from "../components/ListItem.vue";
-import Popover from "../components/Popover.vue";
-import {listevents} from "@/database/db";
+import {events} from "@/database/db";
 
 export default defineComponent({
   components: {
     IonButton,
     IonContent,
-    IonFab,
-    IonFabButton,
     IonHeader,
-    IonIcon,
     IonList,
     IonPage,
     IonReorderGroup,
@@ -106,46 +94,60 @@ export default defineComponent({
     ListItem,
   },
   methods: {
-    async openPopover(ev: Event) {
-      const popover = await popoverController.create({
-        component: Popover,
-        event: ev,
-        componentProps: {
-          closePopover: () => popoverController.dismiss(),
-        },
-      });
-      return popover.present();
-    },
     viewUpcomingPast(e: CustomEvent) {
       this.upcoming = e.detail.value != 'past';
     },
     completeEvent(completedEvent) {
-      this.events.forEach(event => {
-        if (completedEvent.name == event.name && completedEvent.course == event.course){
-          event.completed = "true"
+      this.listevents.forEach(event => {
+        if (completedEvent.title == event.title && completedEvent.class == event.class){
+          // console.log(event)
+          // console.log(event.completed, event.estTime)
+          event.completed = event.estTime
+          // console.log(event)
+          // console.log(event.completed, event.estTime)
         }
       })
-      this.upcomingEvents = this.events.filter(event => {
-        return event.completed == "false"
+      this.upcomingEvents = this.listevents.filter(event => {
+        return event.completed != event.estTime
       })
       this.pastEvents.push(completedEvent)
+      this.key += 1
+    },
+    updateCompletion(event, progress) {
+      event.completed = progress / 60
+    },
+    reorderPriority (e: CustomEvent) {
+      e.detail.complete();
+      // const otherEvents = this.listevents.filter(e => e.type != "testquiz" && e.type != "assignment")
+      // this.listevents.splice(0);
+      // otherEvents.forEach(e => {
+      //   this.listevents.push(e)
+      // })
+      // this.upcomingEvents.forEach(e => {
+      //   this.listevents.push(e)
+      // })
+      // this.pastEvents.forEach(e => {
+      //   this.listevents.push(e)
+      // })
+      // // console.log(this.listevents)
+      // // console.log(events)
+
     }
   },
   setup() {
-    const reorderPriority = (e: CustomEvent) => {
-      e.detail.complete();
-    };
-    const upcomingEvents = listevents.filter(event => {
-      return event.completed == "false"
+    const filteredEvents = events.filter(e => e.type === "testquiz" || e.type === "assignment")
+    const upcomingEvents = filteredEvents.filter(event => {
+      return event.completed != event.estTime
     })
-    const pastEvents = listevents.filter(event => {
-      return event.completed == "true"
+    const pastEvents = filteredEvents.filter(event => {
+      return event.completed == event.estTime
     })
-    return {addOutline, reorderPriority, upcomingEvents, pastEvents};
+    return {addOutline, upcomingEvents, pastEvents};
   },
   data: () => ({
-    events: listevents,
+    listevents: events,
     upcoming: true,
+    key: 0
   }),
 });
 </script>

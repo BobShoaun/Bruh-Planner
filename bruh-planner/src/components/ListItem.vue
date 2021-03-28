@@ -8,7 +8,7 @@
             <h1>{{ name }}</h1>
           </ion-text>
         </ion-col>
-        <ion-col> Due {{ dueDate }}</ion-col>
+        <ion-col> Due <span ref="dueDate"></span></ion-col>
       </ion-row>
       <ion-row>
         <ion-col size="8">
@@ -22,14 +22,14 @@
       </ion-row>
       <ion-row>
         <ion-col size="10">
-          <p v-if="this.completed == 'true'">Estimated Time:</p> 
+          <p v-if="this.completed == this.estimatedTime">Estimated Time:</p> 
           <p v-else>Estimated Time Remaining:</p>
           <p><span ref="estHrs"></span> hours <span ref="estMins"></span> minutes</p>
         </ion-col>
       </ion-row>
-      <div v-if="this.completed == 'false'">
+      <div v-if="this.completed != this.estimatedTime">
         <ion-range 
-            v-if="this.completed == 'false'"
+            v-if="this.completed != this.estimatedTime"
             ref="progressBar"
             min="0"
             :max="estimatedTime * 60"
@@ -38,8 +38,8 @@
             ticks="false"
             @ionChange="calcProgress($event.detail.value)"
         >
-          <ion-label v-if="this.completed == 'false'" slot="start">0%</ion-label>
-          <ion-label v-if="this.completed == 'false'" slot="end">100%</ion-label>
+          <ion-label v-if="this.completed != this.estimatedTime" slot="start">0%</ion-label>
+          <ion-label v-if="this.completed != this.estimatedTime" slot="end">100%</ion-label>
         </ion-range>
       </div>
     </ion-label>
@@ -76,15 +76,14 @@ export default defineComponent({
       type: String,
     },
     completed: {
-      type: String
-    }
-  },
-  data () {
-    return {
-      completedKey: 0
+      type: Number
     }
   },
   mounted() {
+    this.$refs.dueDate.innerText = new Date(this.dueDate).toLocaleDateString('en-US', {
+      day: 'numeric',
+      month: 'short',
+    }).replace(/ /g, ' ');
     this.$refs.estHrs.innerText = Math.trunc(this.estimatedTime);
     this.$refs.estMins.innerText = ((this.estimatedTime % 1) * 60).toFixed(0);
   },
@@ -92,16 +91,18 @@ export default defineComponent({
     calcProgress(e) {
       const progress = e;
       if (progress == this.estimatedTime * 60) {
-        this.presentAlert("Confirm you have completed the task for " + this.name + "!");
+        this.presentAlert();
+      } else {
+        this.updateCompletion(progress);
       }
       const estimatedTime = (this.estimatedTime * 60 - progress) / 60;
       this.$refs.estHrs.innerText = Math.trunc(estimatedTime);
-      this.$refs.estMins.innerText = ((estimatedTime % 1) * 60).toFixed(0);
+      this.$refs.estMins.innerText = ((estimatedTime % 1) * 60).toFixed(0);  
     },
-    async presentAlert(header, message) {
+    async presentAlert() {
       const alert = await alertController.create({
-        header: header,
-        message: message,
+        header: "Confirm you have completed the task for " + this.name + "!",
+        message: "",
         buttons: [
           {
             text: 'Cancel',
@@ -112,7 +113,6 @@ export default defineComponent({
             text: 'Yes!',
             handler: () => {
               this.$emit("complete")
-              this.completedkey += 1
               console.log('Confirm Okay')
             },
           },
@@ -120,6 +120,9 @@ export default defineComponent({
       });
       return alert.present();
     },
+    async updateCompletion(progress) {
+      this.$emit("updateCompletion", progress)
+    }
   },
 });
 </script>

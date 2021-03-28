@@ -1,9 +1,4 @@
 <template>
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Add Assignment</ion-title>
-    </ion-toolbar>
-  </ion-header>
   <ion-content class="no-scroll" :fullscreen="true">
     <ion-header collapse="condense">
       <ion-toolbar>
@@ -28,7 +23,7 @@
     </ion-item>
     <ion-item>
       <ion-label>Due Time*:</ion-label>
-      <ion-datetime v-model="dueTime" display-format="h:mm A" picker-format="h:mm A"></ion-datetime>
+      <ion-datetime v-model="dueDate" display-format="h:mm A" picker-format="h:mm A"></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label>Weight (for one)*:</ion-label>
@@ -70,7 +65,7 @@
       <ion-textarea v-model="notes" rows="4"></ion-textarea>
     </ion-item>
     <ion-list class="buttons">
-      <ion-button fill="outline" v-on:click="closeModal()">Cancel</ion-button>
+      <ion-button fill="outline" v-on:click="$emit('close')">Cancel</ion-button>
       <ion-button fill="solid" v-on:click="addAssignment()">Add to Calendar</ion-button>
     </ion-list>
   </ion-content>
@@ -123,27 +118,23 @@ export default defineComponent({
       this.close();
     },
     addAssignment() {
-      const dueDate = new Date(this.dueDate).toDateString().toString();
-      const dueTime = new Date(this.dueTime).formatTime();
+      const startDate = new Date(this.dueDate).format("YYYY-MM-DD HH:mm");
+      const endDate = new Date(this.dueDate).addHours(1).format("YYYY-MM-DD HH:mm");
       const assignment = {
-        name: this.name,
-        course: this.course,
-        dueDate: dueDate.substr(dueDate.indexOf(" ") + 1),
-        dueTime: dueTime,
+        start: startDate,
+        end: endDate,
+        title: this.name,
+        class: this.course,
+        type: "assignment",
         weight: Number(this.weight),
-        estTimeHrs: Number(this.estTimeHrs),
-        estTimeMins: Number(this.estTimeMins),
+        estTime: 0,
         repeat: this.repeat,
         reminder: this.reminder,
         notes: this.notes,
       };
-      if (
-          !assignment.name ||
-          !assignment.course ||
-          !assignment.weight ||
-          !assignment.estTimeHrs ||
-          !assignment.estTimeMins
-      ) {
+      const estTimeHrs = Number(this.estTimeHrs);
+      const estTimeMins = Number(this.estTimeMins);
+      if (!assignment.title || !assignment.class) {
         this.presentAlert("Empty Fields 😒", "Please fill in all the required fields! 🥺");
         return;
       }
@@ -152,18 +143,16 @@ export default defineComponent({
         return;
       }
       if (
-          assignment.estTimeMins > 59 ||
-          assignment.estTimeHrs < 0 ||
-          (assignment.estTimeHrs === 0 && assignment.estTimeMins < 1) ||
-          (assignment.estTimeHrs > 0 && assignment.estTimeMins < 0)
+          estTimeMins > 59 ||
+          estTimeHrs < 0 ||
+          (estTimeHrs === 0 && estTimeMins < 1) ||
+          (estTimeHrs > 0 && estTimeMins < 0)
       ) {
         this.presentAlert("Invalid Time 😒", "Please enter a valid estimated to complete time! 🥺");
         return;
       }
-      this.presentAlert(
-          "Not Implemented 😔",
-          "You filled in all the fields correctly but this doesn't work yet aha 🤭"
-      );
+      assignment.estTime = estTimeHrs + estTimeMins / 60;
+      this.$emit("add", assignment);
     },
     async presentAlert(header, message) {
       const alert = await alertController.create({
@@ -178,8 +167,7 @@ export default defineComponent({
     name: "",
     course: "",
     dueDate: new Date().toISOString(),
-    dueTime: new Date().toISOString(),
-    weight: "",
+    weight: 0,
     estTimeHrs: "",
     estTimeMins: "",
     repeat: "never",

@@ -5,11 +5,6 @@
     </ion-toolbar>
   </ion-header>
   <ion-content class="no-scroll" :fullscreen="true">
-    <ion-header collapse="condense">
-      <ion-toolbar>
-        <ion-title>Add Course</ion-title>
-      </ion-toolbar>
-    </ion-header>
     <ion-item>
       <ion-label>Name*:</ion-label>
       <ion-input v-model="name" placeholder="Ex. CSC318"></ion-input>
@@ -31,7 +26,7 @@
       <ion-textarea v-model="notes" rows="4"></ion-textarea>
     </ion-item>
     <ion-list class="buttons">
-      <ion-button fill="outline" v-on:click="closeModal()">Cancel</ion-button>
+      <ion-button fill="outline" v-on:click="$emit('close')">Cancel</ion-button>
       <ion-button fill="solid" v-on:click="addCourse()">Add to Calendar</ion-button>
     </ion-list>
   </ion-content>
@@ -105,10 +100,7 @@ export default defineComponent({
         this.presentAlert("Empty Fields 😒", "Please fill in all the required fields! 🥺");
         return;
       }
-      this.presentAlert(
-          "Not Implemented 😔",
-          "You filled in all the fields correctly but this doesn't work yet aha 🤭"
-      );
+      this.$emit("add", course);
     },
     async presentAlert(header, message) {
       const alert = await alertController.create({

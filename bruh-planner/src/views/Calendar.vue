@@ -36,7 +36,6 @@
       <ion-row>
         <vue-cal
             ref="vuecal"
-            :key="componentKey"
             xsmall
             click-to-navigate
             active-view="month"
@@ -56,11 +55,7 @@
           {{ course.name }}
         </ion-chip>
       </ion-row>
-      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button @click="openPopover">
-          <ion-icon :icon="addOutline"/>
-        </ion-fab-button>
-      </ion-fab>
+
     </ion-content>
   </ion-page>
 </template>
@@ -70,86 +65,61 @@ import {
   IonChip,
   IonCol,
   IonContent,
-  IonFab,
-  IonFabButton,
   IonHeader,
   IonIcon,
   IonLabel,
   IonPage,
+  IonRow,
   IonSelect,
   IonSelectOption,
-  IonRow,
   IonTitle,
   IonToolbar,
-  popoverController,
 } from "@ionic/vue";
 import {addOutline, helpCircleOutline} from "ionicons/icons";
 import VueCal from "vue-cal";
 import "vue-cal/dist/vuecal.css";
 import {defineComponent} from "vue";
-import Popover from "../components/Popover.vue";
+
 import {events, courses} from "@/database/db";
 
 export default defineComponent({
+  data() {
+    return {
+      showCourse: "all",
+      events: events,
+      courses: courses,
+    };
+  },
   components: {
     IonChip,
     IonCol,
     IonContent,
-    IonFab,
-    IonFabButton,
     IonHeader,
     IonIcon,
     IonLabel,
     IonPage,
+    IonRow,
     IonSelect,
     IonSelectOption,
-    IonRow,
     IonTitle,
     IonToolbar,
     VueCal,
   },
   methods: {
-    async openPopover(e) {
-      const popover = await popoverController.create({
-        component: Popover,
-        event: e,
-        componentProps: {
-          closePopover: () => popoverController.dismiss(),
-          rerender: () => this.refreshCalendar(),
-        },
-      });
-      return popover.present();
-    },
     filterCourse(course) {
       switch (course) {
         case "all":
           this.events = events;
           break;
         default:
-          this.events = events.filter((e) => e.class === course);
+          this.events = events.filter(e => e.class === course);
       }
     },
-    refreshCalendar() {
-      this.$refs.vuecal.componentKey += 1;
-      console.log(events);
-      console.log("refreshing calendar view");
-    }
-  },
-  watch: {
-    events: function (e) {
-      if (e) {
-        console.log("events change");
-      }
-    }
+
   },
   setup() {
     return {addOutline, helpCircleOutline};
   },
-  data: () => ({
-    showCourse: "all",
-    events: events,
-    courses: courses,
-  }),
 });
 </script>
 

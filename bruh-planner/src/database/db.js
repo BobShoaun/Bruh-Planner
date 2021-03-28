@@ -1,106 +1,54 @@
 export const events = [
-    {
-        start: "2021-02-03 16:00",
-        end: "2021-02-03 18:00",
-        title: "Studio",
-        class: "course1",
-    },
-    {
-        start: "2021-02-10 16:00",
-        end: "2021-02-10 18:00",
-        title: "Studio",
-        class: "course1",
-    },
-    {
-        start: "2021-02-17 16:00",
-        end: "2021-02-17 18:00",
-        title: "Studio",
-        class: "course1",
-    },
-    {
-        start: "2021-02-24 16:00",
-        end: "2021-02-24 18:00",
-        title: "Studio",
-        class: "course1",
-    },
-    {
-        start: "2021-03-03 16:00",
-        end: "2021-03-03 18:00",
-        title: "Studio",
-        class: "course1",
-    },
-    {
-        start: "2021-03-10 16:00",
-        end: "2021-03-10 18:00",
-        title: "Studio",
-        class: "course1",
-    },
-    {
-        start: "2021-03-17 16:00",
-        end: "2021-03-17 18:00",
-        title: "Studio",
-        class: "course1",
-    },
-    {
-        start: "2021-03-24 16:00",
-        end: "2021-03-24 18:00",
-        title: "Studio",
-        class: "course1",
-    },
-    {
-        start: "2021-03-31 16:00",
-        end: "2021-03-31 18:00",
-        title: "Studio",
-        class: "course1",
-    },
-    {
-        start: "2021-03-26 9:00",
-        end: "2021-03-26 10:00",
-        title: "Quiz",
-        class: "course2",
-    },
-];
-
-export const listevents = [
-    {
-        name: "Quiz 1",
-        course: "CSC222",
-        estTime: 2,
-        dueDate: "March 19",
-        weight: 4,
-        completed: "false",
-    },
-    {
-        name: "Test 3",
-        course: "CSC900",
-        estTime: 8,
-        dueDate: "March 30",
-        weight: 20,
-        completed: "false",
-    },
-    {
-        name: "Assignment 22",
-        course: "CSC318",
-        estTime: 10,
-        dueDate: "April 2",
-        weight: 12,
-        completed: "false",
-    },
-    {
-        name: "Quiz",
-        course: "BIO120",
-        estTime: 0.75,
-        dueDate: "April 13",
-        weight: 1,
-        completed: "false",
-    },
+	{
+		start: "2021-03-03 16:00",
+		end: "2021-03-03 18:00",
+		title: "A1",
+		class: "course1",
+		type: "assignment",
+		weight: 15,
+		estTime: 8,
+		repeat: "never",
+		reminder: "never",
+		notes: "",
+        completed: 0
+	},
+	{
+		start: "2021-03-15 22:00",
+		end: "2021-03-15 23:00",
+		title: "Phase 3",
+		class: "course1",
+		type: "assignment",
+		weight: 30,
+		estTime: 8,
+		repeat: "never",
+		reminder: "never",
+		notes: "",
+        completed: 0
+	},
+	{
+		start: "2021-03-26 9:00",
+		end: "2021-03-26 11:00",
+		title: "Test",
+		class: "course2",
+		type: "testquiz",
+		weight: 5,
+		estTime: 0.5,
+		repeat: "never",
+		reminder: "never",
+		notes: "",
+        completed: 0
+	},
 ];
 
 export const courses = [
-    {
-        name: "course1",
-    },
-    {
-        name: "course2",
-    },
+	{
+		name: "course1",
+		professor: "",
+		notes: "",
+	},
+	{
+		name: "course2",
+		professor: "",
+		notes: "",
+	},
 ];
