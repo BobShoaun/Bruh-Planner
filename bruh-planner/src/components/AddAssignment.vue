@@ -131,6 +131,7 @@ export default defineComponent({
         repeat: this.repeat,
         reminder: this.reminder,
         notes: this.notes,
+        completed: 0,
       };
       const estTimeHrs = Number(this.estTimeHrs);
       const estTimeMins = Number(this.estTimeMins);
