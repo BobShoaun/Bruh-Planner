@@ -138,7 +138,7 @@ export default defineComponent({
       };
       const estTimeHrs = Number(this.estTimeHrs);
       const estTimeMins = Number(this.estTimeMins);
-      if (!testquiz.title || !testquiz.class || !testquiz.weight || !estTimeHrs || !estTimeMins) {
+      if (!testquiz.title || !testquiz.class) {
         this.presentAlert("Empty Fields 😒", "Please fill in all the required fields! 🥺");
         return;
       }
@@ -176,7 +176,7 @@ export default defineComponent({
     course: "",
     startDate: new Date().toISOString(),
     endDate: new Date().addHours(1).toISOString(),
-    weight: "",
+    weight: 0,
     estTimeHrs: "",
     estTimeMins: "",
     repeat: "never",
