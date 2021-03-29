@@ -1,30 +1,26 @@
 <template>
-
-  <Navbar />
-  <Dashboard />
-
+  <ion-app>
+    <ion-router-outlet />
+  </ion-app>
 </template>
 
-<script>
-import Navbar from './components/Navbar.vue';
-import Dashboard from "./components/Dashboard.vue";
+<script lang="ts">
 
-export default {
+import { IonApp, IonRouterOutlet } from '@ionic/vue';
+import { defineComponent } from 'vue';
+import "vue-cal";
+
+export default defineComponent({
   name: 'App',
   components: {
-    Dashboard,
-    Navbar
+    IonApp,
+    IonRouterOutlet
   }
-}
+});
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  /* text-align: center; */
-  /* color: #2c3e50; */
-  /* margin-top: 60px; */
+.no-scroll {
+  --overflow: hidden;
 }
 </style>

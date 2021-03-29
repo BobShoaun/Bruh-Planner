@@ -1,71 +1,212 @@
 <template>
-    <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Test/Quiz</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
-    <div class="modal-body">
-        <form>
-            <div class="form-group">
-                <label for="task-name">Name: </label>
-                <input type="text" class="form-control" id="task-name" placeholder="Ex. CSC209 Quiz" />
-            </div>
-            <div class="form-group">
-                <label for="select-course">Course*: </label>
-                <select class="form-control" id="select-course">
-                    <option>Course 1</option>
-                    <option>Course 2</option>
-                    <option>Course 3</option>
-                    <option>Course 4</option>
-                    <option>Course 5</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="select-start">Start Time*: </label>
-            </div>
-            <div class="form-group">
-                <label for="select-start">End Time*: </label>
-            </div>
-            <div class="form-group">
-                <label for="select-start">Weight*: </label>
-                <input type="number" class="form-control" id="select-start" placeholder="0" min="0" max="100" />
-            </div>
-            <div class="form-group">
-                <label for="select-study">Estimated Time to Study*: </label>
-                <input type="number" class="form-control" id="select-study" placeholder="0" min="0" />
-            </div>
-            <div class="form-group">
-                <label for="select-repeat">Repeat*: </label>
-                <select class="form-control" id="select-repeat">
-                    <option selected>Never</option>
-                    <option>Every day</option>
-                    <option>Every week</option>
-                    <option>Every 2 weeks</option>
-                    <option>Custom</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="select-reminder">Reminder*: </label>
-                <select class="form-control" id="select-reminder">
-                    <option selected>Never</option>
-                    <option>At time of event</option>
-                    <option>10 minutes before</option>
-                    <option>Custom</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="task-notes">Notes: </label>
-                <textarea class="form-control" id="task-notes" rows="3"></textarea>
-            </div>
-        </form>
-    </div>
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Add Test/Quiz</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content :fullscreen="true">
+    <ion-item>
+      <ion-label>Name*:</ion-label>
+      <ion-input v-model="name" placeholder="Ex. Quiz"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Course*:</ion-label>
+      <ion-select v-model="course" placeholder="Select One">
+        <ion-select-option v-for="course in courses" :key="course.name" :value="course.name">
+          {{ course.name }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Date*:</ion-label>
+      <ion-datetime v-model="startDate" display-format="MMMM DD, YYYY"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>Start Time*:</ion-label>
+      <ion-datetime v-model="startDate" display-format="h:mm A" picker-format="h:mm A"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>End Time*:</ion-label>
+      <ion-datetime v-model="endDate" display-format="h:mm A" picker-format="h:mm A"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>Weight (for one)*:</ion-label>
+      <ion-input v-model="weight" type="number" min="0" max="100"></ion-input>
+      %
+    </ion-item>
+    <ion-item>
+      Estimated Time to Study*:
+      <ion-col size="3">
+        <ion-input v-model="estTimeHrs" type="number" min="0" placeholder="1"></ion-input>
+        hours
+      </ion-col>
+      <ion-col size="3">
+        <ion-input v-model="estTimeMins" type="number" min="1" max="59" placeholder="30"></ion-input>
+        minutes
+      </ion-col>
+    </ion-item>
+    <ion-item>
+      <ion-label>Repeat:</ion-label>
+      <ion-select v-model="repeat">
+        <ion-select-option value="never">Never</ion-select-option>
+        <ion-select-option value="every day">Every day</ion-select-option>
+        <ion-select-option value="every week">Every week</ion-select-option>
+        <ion-select-option value="every 2 weeks">Every 2 weeks</ion-select-option>
+        <ion-select-option value="custom">Custom</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item v-if="repeat !== 'never'">
+      <ion-label>End Repeat:</ion-label>
+      <ion-datetime v-model="endRepeat" display-format="MMMM DD, YYYY"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>Reminder:</ion-label>
+      <ion-select v-model="reminder">
+        <ion-select-option value="never">Never</ion-select-option>
+        <ion-select-option value="at time of event">At time of event</ion-select-option>
+        <ion-select-option value="10 minutes before">10 minutes before</ion-select-option>
+        <ion-select-option value="custom">Custom</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Notes:</ion-label>
+      <ion-textarea v-model="notes" rows="4"></ion-textarea>
+    </ion-item>
+    <ion-list class="buttons">
+      <ion-button fill="outline" v-on:click="$emit('close')">Cancel</ion-button>
+      <ion-button fill="solid" v-on:click="addTestQuiz()">Add to Calendar</ion-button>
+    </ion-list>
+  </ion-content>
 </template>
 
 <script>
-export default {};
+import {
+  alertController,
+  IonButton,
+  IonCol,
+  IonContent,
+  IonDatetime,
+  IonHeader,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonSelect,
+  IonSelectOption,
+  IonTextarea,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/vue";
+import {defineComponent} from "vue";
+import {courses} from "@/database/db";
+
+export default defineComponent({
+  name: "AddTestQuiz",
+  components: {
+    IonButton,
+    IonContent,
+    IonCol,
+    IonDatetime,
+    IonHeader,
+    IonInput,
+    IonItem,
+    IonLabel,
+    IonList,
+    IonSelect,
+    IonSelectOption,
+    IonTextarea,
+    IonTitle,
+    IonToolbar,
+  },
+  props: {
+    close: {type: Function},
+  },
+  methods: {
+    closeModal() {
+      this.close();
+    },
+    addTestQuiz() {
+      const startTime = new Date(this.startDate).format("YYYY-MM-DD HH:mm");
+      const endTime = new Date(this.endDate).format("YYYY-MM-DD HH:mm");
+      const testquiz = {
+        start: startTime,
+        end: endTime,
+        title: this.name,
+        class: this.course,
+        type: "testquiz",
+        weight: Number(this.weight),
+        estTime: 0,
+        repeat: this.repeat,
+        reminder: this.reminder,
+        notes: this.notes,
+        completed: 0,
+      };
+      const estTimeHrs = Number(this.estTimeHrs);
+      const estTimeMins = Number(this.estTimeMins);
+      if (!testquiz.title || !testquiz.class) {
+        this.presentAlert("Empty Fields 😒", "Please fill in all the required fields! 🥺");
+        return;
+      }
+      if (startTime >= endTime) {
+        this.presentAlert("Invalid Time 😒", "Your test shouldn't end before it even starts! 🤔");
+        return;
+      }
+      if (testquiz.weight < 0 || testquiz.weight > 100) {
+        this.presentAlert("Invalid Weight 😒", "Please enter a valid weight between 0 to 100%! 🥺");
+        return;
+      }
+      if (testquiz.repeat !== "never") {
+        this.presentAlert(
+            "Not Implemented 😔",
+            "You filled in all the fields correctly but repeats other than 'Never' aren't supported yet aha 🤭"
+        );
+        return;
+      }
+      if (
+          estTimeMins > 59 ||
+          estTimeHrs < 0 ||
+          (estTimeHrs === 0 && estTimeMins < 1) ||
+          (estTimeHrs > 0 && estTimeMins < 0)
+      ) {
+        this.presentAlert("Invalid Time 😒", "Please enter a valid estimated to complete time! 🥺");
+        return;
+      }
+      testquiz.estTime = estTimeHrs + estTimeMins / 60;
+      this.$emit("add", testquiz);
+    },
+    async presentAlert(header, message) {
+      const alert = await alertController.create({
+        header: header,
+        message: message,
+        buttons: ["Got it!"],
+      });
+      return alert.present();
+    },
+  },
+  data: () => ({
+    name: "",
+    course: "",
+    startDate: new Date().toISOString(),
+    endDate: new Date().addHours(1).toISOString(),
+    weight: 0,
+    estTimeHrs: "",
+    estTimeMins: "",
+    repeat: "never",
+    endRepeat: new Date().addDays(7).toISOString(),
+    reminder: "never",
+    notes: "",
+    courses: courses,
+  }),
+});
 </script>
 
 <style scoped>
 textarea {
-    resize: none;
+  resize: none;
+}
+
+.buttons {
+  padding-top: 5vh;
+  text-align: center;
 }
 </style>
