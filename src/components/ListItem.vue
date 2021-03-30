@@ -114,6 +114,9 @@ export default defineComponent({
           {
             text: "Cancel",
             role: "cancel",
+            handler: () => {
+              this.updateCompletion(0)
+            }
           },
           {
             text: "Yes!",
