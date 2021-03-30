@@ -28,14 +28,13 @@
               </ion-select-option>
             </ion-select>
           </ion-col>
-          <ion-col class="align-help" size="1.5">
+          <ion-col v-if="false" class="align-help" size="1.5">
             <ion-icon size="large" :icon="helpCircleOutline"/>
           </ion-col>
         </ion-row>
       </div>
       <ion-row>
         <vue-cal
-            ref="vuecal"
             xsmall
             click-to-navigate
             active-view="month"
@@ -55,7 +54,6 @@
           {{ course.name }}
         </ion-chip>
       </ion-row>
-
     </ion-content>
   </ion-page>
 </template>
@@ -112,10 +110,9 @@ export default defineComponent({
           this.events = events;
           break;
         default:
-          this.events = events.filter(e => e.class === course);
+          this.events = events.filter((e) => e.class === course);
       }
     },
-
   },
   setup() {
     return {addOutline, helpCircleOutline};
@@ -196,6 +193,23 @@ ion-chip {
 .course7 {
   color: var(--ion-color-course7-text);
   background-color: var(--ion-color-course7);
+}
+
+/*HARD CODING CALENDAR COLOURS*/
+
+.CSC318, .csc318, .Csc318, .cSC318, .csC318, .CsC318 {
+  color: var(--ion-color-course7-text);
+  background-color: var(--ion-color-course7);
+}
+
+.EAS120 {
+  color: var(--ion-color-course1-text);
+  background-color: var(--ion-color-course1);
+}
+
+.CSB201 {
+  color: var(--ion-color-course4-text);
+  background-color: var(--ion-color-course4);
 }
 
 .vertical-align {

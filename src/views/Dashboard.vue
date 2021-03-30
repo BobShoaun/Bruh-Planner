@@ -33,11 +33,7 @@
       </ion-popover>
     </ion-content>
   </ion-page>
-  <AddAssignment
-      v-if="addType === 'assignment'"
-      v-on:add="addAssignment"
-      v-on:close="addType = ''"
-  />
+  <AddAssignment v-if="addType === 'assignment'" v-on:add="addAssignment" v-on:close="addType = ''"/>
   <AddCourse v-if="addType === 'course'" v-on:add="addCourse" v-on:close="addType = ''"/>
   <AddTestQuiz v-if="addType === 'testquiz'" v-on:add="addTestQuiz" v-on:close="addType = ''"/>
 </template>
@@ -83,7 +79,6 @@ export default {
     IonTabBar,
     IonTabButton,
     IonTabs,
-
   },
   data() {
     return {
