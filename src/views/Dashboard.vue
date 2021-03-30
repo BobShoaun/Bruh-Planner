@@ -86,7 +86,12 @@ export default {
       courses: courses,
       openAdd: false,
       addType: "",
+      eee: new Event('added'),
     };
+  },
+  mounted() {
+    // const event = new Event('added');
+    // document.dispatchEvent(event);
   },
   methods: {
     closeAdd() {
@@ -100,6 +105,7 @@ export default {
     addAssignment(assignment) {
       this.closeAdd();
       this.events.push(assignment);
+      document.dispatchEvent(this.eee);
     },
     addCourse(course) {
       this.closeAdd();
