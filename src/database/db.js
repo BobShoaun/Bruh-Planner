@@ -10,7 +10,7 @@ export const events = [
         repeat: "never",
         reminder: "never",
         notes: "",
-        completed: 8,
+        completed: 2,
     },
     {
         start: "2021-03-15 22:00",
@@ -36,7 +36,7 @@ export const events = [
         repeat: "never",
         reminder: "never",
         notes: "",
-        completed: 0.5,
+        completed: 0,
     },
     {
         start: "2021-03-31 15:00",

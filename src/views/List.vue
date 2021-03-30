@@ -27,12 +27,7 @@
               v-on:complete="completeEvent(event)"
               v-on:updateCompletion="updateCompletion(event, $event)"
               :key="index"
-              :name="event.title"
-              :course="event.class"
-              :estimatedTime="event.estTime"
-              :dueDate="event.end"
-              :weight="event.weight"
-              :completed="event.completed"
+              :event="event"
           />
         </ion-reorder-group>
         <ion-list class="tasks-end">
@@ -45,12 +40,7 @@
         <ListItem
             v-for="(event, index) in pastEvents"
             :key="index"
-            :name="event.title"
-            :course="event.class"
-            :estimatedTime="event.estTime"
-            :dueDate="event.end"
-            :weight="event.weight"
-            :completed="event.completed"
+            :event="event"
         />
         <ion-list class="tasks-end">
           <div v-if="pastEvents.length===0">
@@ -98,37 +88,39 @@ export default defineComponent({
     viewUpcomingPast(e: CustomEvent) {
       this.upcoming = e.detail.value != 'past';
     },
-    completeEvent(completedEvent) {
-      this.listevents.forEach(event => {
-        if (completedEvent.title == event.title && completedEvent.class == event.class) {
-          event.completed = event.estTime
-        }
-      })
-      this.upcomingEvents = this.listevents.filter(event => {
+    async completeEvent(completedEvent) {
+      this.upcomingEvents = this.upcomingEvents.filter(event => {
         return event.completed != event.estTime
       })
       this.pastEvents.push(completedEvent)
-      this.key += 1
+      this.updateComponent();
+    },
+    async updateComponent() {
+      this.upcoming = false
+      await this.$nextTick()
+      this.upcoming = true
     },
     updateCompletion(event, progress) {
       event.completed = progress / 60
     },
-    reorderPriority(e: CustomEvent) {
-      e.detail.complete();
-      // const otherEvents = this.listevents.filter(e => e.type != "testquiz" && e.type != "assignment")
-      // this.listevents.splice(0);
-      // otherEvents.forEach(e => {
-      //   this.listevents.push(e)
-      // })
-      // this.upcomingEvents.forEach(e => {
-      //   this.listevents.push(e)
-      // })
-      // this.pastEvents.forEach(e => {
-      //   this.listevents.push(e)
-      // })
+    async reorderPriority(e: CustomEvent) {
+      this.upcomingEvents = e.detail.complete(this.upcomingEvents);      
+      this.listevents.splice(0);
+      const otherEvents = this.listevents.filter(e => e.type != "testquiz" && e.type != "assignment")
+      otherEvents.forEach(e => {
+        this.listevents.push(e)
+      })
+      this.upcomingEvents.forEach(e => {
+        this.listevents.push(e)
+      })
+      this.pastEvents.forEach(e => {
+        this.listevents.push(e)
+      })
+      this.updateComponent();
+
       // // console.log(this.listevents)
       // // console.log(events)
-    }
+    },
   },
   setup() {
     const filteredEvents = events.filter(e => e.type === "testquiz" || e.type === "assignment")
@@ -143,7 +135,6 @@ export default defineComponent({
   data: () => ({
     listevents: events,
     upcoming: true,
-    key: 0
   }),
 });
 </script>

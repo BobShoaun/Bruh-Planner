@@ -5,7 +5,7 @@
       <ion-row>
         <ion-col size="8">
           <ion-text color="primary">
-            <h1>{{ name }}</h1>
+            <h1>{{ event.title }}</h1>
           </ion-text>
         </ion-col>
         <ion-col> Due <span ref="dueDate"></span></ion-col>
@@ -13,33 +13,34 @@
       <ion-row>
         <ion-col size="8">
           <ion-text color="secondary">
-            <h2>{{ course }}</h2>
+            <h2>{{ event.class }}</h2>
           </ion-text>
         </ion-col>
         <ion-col>
-          <p>Weight: {{ weight }}%</p>
+          <p>Weight: {{ event.weight }}%</p>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col size="10">
-          <p v-if="this.completed === this.estimatedTime">Estimated Time:</p>
+          <p v-if="this.event.completed === this.event.estTime">Estimated Time:</p>
           <p v-else>Estimated Time Remaining:</p>
           <p><span ref="estHrs"></span> hours <span ref="estMins"></span> minutes</p>
         </ion-col>
       </ion-row>
-      <div v-if="this.completed !== this.estimatedTime">
+      <div v-if="this.event.completed !== this.event.estTime">
         <ion-range 
-            v-if="this.completed !== this.estimatedTime"
+            v-if="this.event.completed !== this.event.estTime"
             ref="progressBar"
             min="0"
-            :max="estimatedTime * 60"
+            :value="this.event.completed * 60"
+            :max="this.event.estTime * 60"
             step="15"
             snaps="true"
             ticks="false"
             @ionChange="calcProgress($event.detail.value)"
         >
-          <ion-label v-if="this.completed !== this.estimatedTime" slot="start">0%</ion-label>
-          <ion-label v-if="this.completed !== this.estimatedTime" slot="end">100%</ion-label>
+          <ion-label v-if="this.event.completed !== this.event.estTime" slot="start">0%</ion-label>
+          <ion-label v-if="this.event.completed !== this.event.estTime" slot="end">100%</ion-label>
         </ion-range>
       </div>
     </ion-label>
@@ -54,54 +55,33 @@ export default defineComponent({
   name: "ListItem",
   components: {IonCol, IonItem, IonLabel, IonRange, IonReorder, IonRow, IonText},
   props: {
-    name: {
-      type: String,
+    event: {
+      type: Object,
     },
-    course: {
-      type: String,
-    },
-    estimatedTime: {
-      type: Number,
-    },
-    dueDate: {
-      type: String,
-    },
-    weight: {
-      type: Number,
-    },
-    startTime: {
-      type: String,
-    },
-    endTime: {
-      type: String,
-    },
-    completed: {
-      type: Number
-    }
   },
   mounted() {
-    this.$refs.dueDate.innerText = new Date(this.dueDate).toLocaleDateString('en-US', {
+    this.$refs.dueDate.innerText = new Date(this.event.start).toLocaleDateString('en-US', {
       day: 'numeric',
       month: 'short',
     }).replace(/ /g, ' ');
-    this.$refs.estHrs.innerText = Math.trunc(this.estimatedTime);
-    this.$refs.estMins.innerText = ((this.estimatedTime % 1) * 60).toFixed(0);
+    this.$refs.estHrs.innerText = Math.trunc(this.event.estTime);
+    this.$refs.estMins.innerText = ((this.event.estTime % 1) * 60).toFixed(0);
   },
   methods: {
     calcProgress(e) {
+      console.log(this.event.completed)
       const progress = e;
-      if (progress === this.estimatedTime * 60) {
-        this.presentAlert();
-      } else {
-        this.updateCompletion(progress);
-      }
-      const estimatedTime = (this.estimatedTime * 60 - progress) / 60;
+      const estimatedTime = (this.event.estTime * 60 - progress) / 60;
       this.$refs.estHrs.innerText = Math.trunc(estimatedTime);
       this.$refs.estMins.innerText = ((estimatedTime % 1) * 60).toFixed(0);  
+      this.updateCompletion(progress);
+      if (progress === this.event.estTime * 60) {
+        this.presentAlert();
+      }
     },
     async presentAlert() {
       const alert = await alertController.create({
-        header: "Confirm you have completed the task for " + this.name + "!",
+        header: "Confirm you have completed the task for " + this.event.title + "!",
         message: "",
         buttons: [
           {
@@ -111,8 +91,8 @@ export default defineComponent({
           {
             text: 'Yes!',
             handler: () => {
+              console.log('completed emit')
               this.$emit("complete")
-              console.log('Confirm Okay')
             },
           },
         ]
