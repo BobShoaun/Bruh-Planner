@@ -123,19 +123,33 @@ export default defineComponent({
     },
   },
   setup() {
-    const filteredEvents = events.filter(e => e.type === "testquiz" || e.type === "assignment")
-    const upcomingEvents = filteredEvents.filter(event => {
-      return event.completed != event.estTime
-    })
-    const pastEvents = filteredEvents.filter(event => {
-      return event.completed == event.estTime
-    })
-    return {addOutline, upcomingEvents, pastEvents};
+    // const filteredEvents = events.filter(e => e.type === "testquiz" || e.type === "assignment")
+    // const upcomingEvents = filteredEvents.filter(event => {
+    //   return event.completed != event.estTime
+    // })
+    // const pastEvents = filteredEvents.filter(event => {
+    //   return event.completed == event.estTime
+    // })
+    // return {addOutline, upcomingEvents, pastEvents};
   },
   data: () => ({
     listevents: events,
+    upcomingEvents: [], 
+    pastEvents: [],
     upcoming: true,
   }),
+  ionViewDidEnter() {
+    // filteredEvents = events.filter(e => e.type === "testquiz" || e.type === "assignment")
+    console.log("yo")
+    const filteredEvents = this.listevents.filter(e => e.type === "testquiz" || e.type === "assignment")
+    this.upcomingEvents = filteredEvents.filter(event => {
+      return event.completed != event.estTime
+    })
+    this.pastEvents = filteredEvents.filter(event => {
+      return event.completed == event.estTime
+    })
+    this.updateComponent();
+  }
 });
 </script>
 
