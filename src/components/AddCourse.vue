@@ -4,7 +4,7 @@
       <ion-title>Add Course</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-content class="no-scroll" :fullscreen="true">
+  <ion-content :fullscreen="true">
     <ion-item>
       <ion-label>Name*:</ion-label>
       <ion-input v-model="name" placeholder="Ex. CSC318"></ion-input>

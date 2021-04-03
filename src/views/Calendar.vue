@@ -45,7 +45,7 @@
             :editable-events="{ title: true, drag: false, resize: true, delete: true, create: false }"
             :events="events"
             startWeekOnSunday
-            style="height: 450px; width: 100%;"
+            style="height: 65vh; width: 100%;"
         >
         </vue-cal>
       </ion-row>

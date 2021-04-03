@@ -58,7 +58,7 @@ import {
   IonRow,
   IonText,
   alertController,
-  modalController
+  modalController,
 } from "@ionic/vue";
 import {defineComponent} from "vue";
 import Event from "@/components/Event";
@@ -78,19 +78,18 @@ export default defineComponent({
           month: "short",
         })
         .replace(/ /g, " ");
-    this.$refs.estHrs.innerText = Math.trunc(this.event.estTime);
-    this.$refs.estMins.innerText = ((this.event.estTime % 1) * 60).toFixed(0);
+    this.$refs.estHrs.innerText = Math.trunc(this.event.estTime - this.event.completed);
+    this.$refs.estMins.innerText = (((this.event.estTime - this.event.completed) % 1) * 60).toFixed(0);
   },
   methods: {
     async openModal() {
-      const modal = await modalController
-          .create({
-            component: Event,
-            componentProps: {
-              event: this.event,
-              closeEvent: () => modalController.dismiss(),
-            },
-          })
+      const modal = await modalController.create({
+        component: Event,
+        componentProps: {
+          event: this.event,
+          closeEvent: () => modalController.dismiss(),
+        },
+      });
       return modal.present();
     },
     showEvent(type) {
@@ -115,8 +114,8 @@ export default defineComponent({
             text: "Cancel",
             role: "cancel",
             handler: () => {
-              this.updateCompletion(0)
-            }
+              this.updateCompletion(0);
+            },
           },
           {
             text: "Yes!",

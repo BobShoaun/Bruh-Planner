@@ -4,7 +4,7 @@
       <ion-title>Add Lectures</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-content class="no-scroll" :fullscreen="true">
+  <ion-content :fullscreen="true">
     <ion-header collapse="condense">
       <ion-toolbar>
         <ion-title>Add Lectures</ion-title>
