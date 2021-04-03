@@ -22,7 +22,7 @@
       </ion-row>
       <ion-row>
         <ion-col size="10">
-          <p v-if="this.event.completed === this.event.estTime">Estimated Time:</p>
+          <p v-if="this.event.completed === this.event.estTime">Time Taken:</p>
           <p v-else>Estimated Time Remaining:</p>
           <p><span ref="estHrs"></span> hours <span ref="estMins"></span> minutes</p>
         </ion-col>
@@ -78,8 +78,13 @@ export default defineComponent({
           month: "short",
         })
         .replace(/ /g, " ");
-    this.$refs.estHrs.innerText = Math.trunc(this.event.estTime - this.event.completed);
-    this.$refs.estMins.innerText = (((this.event.estTime - this.event.completed) % 1) * 60).toFixed(0);
+    if (this.event.estTime === this.event.completed) {
+      this.$refs.estHrs.innerText = Math.trunc(this.event.estTime);
+      this.$refs.estMins.innerText = ((this.event.estTime % 1) * 60).toFixed(0);
+    } else {
+      this.$refs.estHrs.innerText = Math.trunc(this.event.estTime - this.event.completed);
+      this.$refs.estMins.innerText = (((this.event.estTime - this.event.completed) % 1) * 60).toFixed(0);
+    }
   },
   methods: {
     async openEventModal() {
@@ -87,7 +92,10 @@ export default defineComponent({
         component: Event,
         componentProps: {
           event: this.event,
-          closeEvent: () => {modalController.dismiss(); this.openEvent = false;},
+          closeEvent: () => {
+            modalController.dismiss();
+            this.openEvent = false;
+          },
         },
       });
       return modal.present();

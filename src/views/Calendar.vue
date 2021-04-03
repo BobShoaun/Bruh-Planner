@@ -103,12 +103,10 @@ export default defineComponent({
   },
   methods: {
     filterCourse(course) {
-      switch (course) {
-        case "all":
-          this.events = events;
-          break;
-        default:
-          this.events = events.filter((e) => e.class === course);
+      if (course === "all") {
+        this.events = events;
+      } else {
+        this.events = events.filter((e) => e.class === course);
       }
     },
     openCourse(course) {
@@ -121,7 +119,10 @@ export default defineComponent({
         component: Course,
         componentProps: {
           course: this.course,
-          closeCourse: () => {modalController.dismiss(); this.viewCourse = false;}
+          closeCourse: () => {
+            modalController.dismiss();
+            this.viewCourse = false;
+          }
         },
       });
       return modal.present();
@@ -231,14 +232,5 @@ ion-chip {
 .CSB201 {
   color: var(--ion-color-course4-text);
   background-color: var(--ion-color-course4);
-}
-
-.vertical-align {
-  padding-top: 15px;
-  text-align: center;
-}
-
-.align-help {
-  padding-top: 10px;
 }
 </style>

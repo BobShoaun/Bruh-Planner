@@ -1,13 +1,13 @@
 <template>
   <ion-app>
-    <ion-router-outlet />
+    <ion-router-outlet/>
   </ion-app>
 </template>
 
 <script lang="ts">
 
-import { IonApp, IonRouterOutlet } from '@ionic/vue';
-import { defineComponent } from 'vue';
+import {IonApp, IonRouterOutlet} from '@ionic/vue';
+import {defineComponent} from 'vue';
 import "vue-cal";
 
 export default defineComponent({
@@ -22,5 +22,14 @@ export default defineComponent({
 <style>
 .no-scroll {
   --overflow: hidden;
+}
+
+.vertical-align {
+  padding-top: 15px;
+  text-align: center;
+}
+
+.align-help {
+  padding-top: 10px;
 }
 </style>

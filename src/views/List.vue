@@ -11,16 +11,30 @@
           <ion-title size="large">List</ion-title>
         </ion-toolbar>
       </ion-header>
-      <ion-segment value="upcoming" @ionChange="viewUpcomingPast($event)">
-        <ion-segment-button value="upcoming">
-          Upcoming Tasks
-        </ion-segment-button>
-        <ion-segment-button value="past">
-          Past Tasks
-        </ion-segment-button>
-      </ion-segment>
+      <div>
+        <ion-row>
+          <ion-col size="3" class="vertical-align">
+            <ion-label>Show:</ion-label>
+          </ion-col>
+          <ion-col size="7.5">
+            <ion-select
+                v-model="showTasks"
+                interface="action-sheet"
+                @ionChange="filterTasks($event.detail.value)"
+            >
+              <ion-select-option value="upcoming">Upcoming Tasks</ion-select-option>
+              <ion-select-option value="past">Past Tasks</ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col v-if="false" class="align-help" size="1.5">
+            <ion-icon size="large" :icon="helpCircleOutline"/>
+          </ion-col>
+        </ion-row>
+      </div>
       <div v-if="upcoming">
-        <ion-button expand="full">Custom Sort</ion-button>
+        <ion-list class="button">
+          <ion-button color="tertiary" expand="block">Custom Sort</ion-button>
+        </ion-list>
         <ion-reorder-group @ionItemReorder="reorderPriority($event)" :disabled="false">
           <ListItem
               v-for="(event, index) in upcomingEvents"
@@ -51,13 +65,16 @@
 <script lang="ts">
 import {
   IonButton,
+  IonCol,
   IonContent,
   IonHeader,
+  IonLabel,
   IonList,
   IonPage,
   IonReorderGroup,
-  IonSegment,
-  IonSegmentButton,
+  IonRow,
+  IonSelect,
+  IonSelectOption,
   IonTitle,
   IonToolbar,
 } from "@ionic/vue";
@@ -68,27 +85,30 @@ import {events} from "@/database/db";
 export default defineComponent({
   components: {
     IonButton,
+    IonCol,
     IonContent,
     IonHeader,
+    IonLabel,
     IonList,
     IonPage,
     IonReorderGroup,
-    IonSegment,
-    IonSegmentButton,
+    IonRow,
+    IonSelect,
+    IonSelectOption,
     IonTitle,
     IonToolbar,
     ListItem,
   },
   methods: {
-    viewUpcomingPast(e: CustomEvent) {
-      this.upcoming = e.detail.value != "past";
+    filterTasks(type) {
+      this.upcoming = type !== "past";
     },
     async completeEvent(completedEvent) {
       this.upcomingEvents = this.upcomingEvents.filter((event) => {
         return event.completed != event.estTime;
       });
       this.pastEvents.push(completedEvent);
-      this.updateComponent();
+      await this.updateComponent();
     },
     async updateComponent() {
       this.upcoming = false;
@@ -100,28 +120,31 @@ export default defineComponent({
     },
     async reorderPriority(e: CustomEvent) {
       this.upcomingEvents = e.detail.complete(this.upcomingEvents);
-      this.listevents.splice(0);
-      const otherEvents = this.listevents.filter((e) => e.type != "testquiz" && e.type != "assignment");
+      this.events.splice(0);
+      const otherEvents = this.events.filter((e) => e.type != "testquiz" && e.type != "assignment");
       otherEvents.forEach((e) => {
-        this.listevents.push(e);
+        this.events.push(e);
       });
       this.upcomingEvents.forEach((e) => {
-        this.listevents.push(e);
+        this.events.push(e);
       });
       this.pastEvents.forEach((e) => {
-        this.listevents.push(e);
+        this.events.push(e);
       });
-      this.updateComponent();
+      await this.updateComponent();
     },
   },
-  data: () => ({
-    listevents: events,
-    upcomingEvents: [],
-    pastEvents: [],
-    upcoming: true,
-  }),
+  data() {
+    return {
+      showTasks: "upcoming",
+      events: events,
+      upcomingEvents: [],
+      pastEvents: [],
+      upcoming: true,
+    };
+  },
   ionViewDidEnter() {
-    const filteredEvents = this.listevents.filter((e) => e.type === "testquiz" || e.type === "assignment");
+    const filteredEvents = this.events.filter((e) => e.type === "testquiz" || e.type === "assignment");
     this.upcomingEvents = filteredEvents.filter((event) => {
       return event.completed != event.estTime;
     });
@@ -134,6 +157,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.button {
+  text-align: center;
+}
+
 .tasks-end {
   padding: 2.5vh;
   height: 10vh;
