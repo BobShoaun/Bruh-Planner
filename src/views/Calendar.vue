@@ -50,7 +50,7 @@
         </vue-cal>
       </ion-row>
       <ion-row>
-        <ion-chip v-on:click="openCourse(course)" @click="openModal" v-for="course in courses" :key="course.name"
+        <ion-chip v-on:click="openCourse(course)" v-for="course in courses" :key="course.name"
                   :class="course.name">
           {{ course.name }}
         </ion-chip>
@@ -114,13 +114,14 @@ export default defineComponent({
     openCourse(course) {
       this.viewCourse = true;
       this.course = course;
+      this.openCourseModal();
     },
-    async openModal() {
+    async openCourseModal() {
       const modal = await modalController.create({
         component: Course,
         componentProps: {
           course: this.course,
-          closeCourse: () => modalController.dismiss(),
+          closeCourse: () => {modalController.dismiss(); this.viewCourse = false;}
         },
       });
       return modal.present();

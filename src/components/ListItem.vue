@@ -1,5 +1,5 @@
 <template>
-  <ion-item v-on:click="showEvent(true)" @click="openModal">
+  <ion-item v-on:click="showEvent">
     <ion-reorder slot="start"></ion-reorder>
     <ion-label class="ion-text-wrap">
       <ion-row>
@@ -82,18 +82,19 @@ export default defineComponent({
     this.$refs.estMins.innerText = (((this.event.estTime - this.event.completed) % 1) * 60).toFixed(0);
   },
   methods: {
-    async openModal() {
+    async openEventModal() {
       const modal = await modalController.create({
         component: Event,
         componentProps: {
           event: this.event,
-          closeEvent: () => modalController.dismiss(),
+          closeEvent: () => {modalController.dismiss(); this.openEvent = false;},
         },
       });
       return modal.present();
     },
-    showEvent(type) {
-      this.openEvent = type;
+    showEvent() {
+      this.openEvent = true;
+      this.openEventModal();
     },
     calcProgress(e) {
       const progress = e;
