@@ -42,6 +42,7 @@
             :time-from="8 * 60"
             :time-to="24 * 60"
             todayButton
+            :editable-events="{ title: true, drag: false, resize: true, delete: true, create: false }"
             :events="events"
             startWeekOnSunday
             style="height: 65vh; width: 100%;"
@@ -54,40 +55,19 @@
           {{ course.name }}
         </ion-chip>
       </ion-row>
-      <ion-fab class="floating-button" vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button @click="openAdd = !openAdd">
-          <ion-icon :icon="addOutline"/>
-        </ion-fab-button>
-      </ion-fab>
-      <ion-popover :is-open="openAdd" :backdropDismiss="false" :translucent="true">
-        <ion-content class="ion-padding no-scroll">
-          <ion-list>
-            <ion-item v-on:click="openAddType('course')">Add Course</ion-item>
-            <ion-item v-on:click="openAddType('assignment')">Add Assignment</ion-item>
-            <ion-item v-on:click="openAddType('testquiz')">Add Test/Quiz</ion-item>
-            <ion-item lines="none" v-on:click="openAdd = false">Close</ion-item>
-          </ion-list>
-        </ion-content>
-      </ion-popover>
     </ion-content>
     <Course v-if="viewCourse === true" :event="this.course"/>
   </ion-page>
-  <AddAssignment v-if="addType === 'assignment'" v-on:add="addAssignment" v-on:close="addType = ''"/>
-  <AddCourse v-if="addType === 'course'" v-on:add="addCourse" v-on:close="addType = ''"/>
-  <AddTestQuiz v-if="addType === 'testquiz'" v-on:add="addTestQuiz" v-on:close="addType = ''"/>
 </template>
 
 <script>
 import {
-  IonFab,
-  IonFabButton,
   IonChip,
   IonCol,
   IonContent,
   IonHeader,
   IonIcon,
   IonLabel,
-  IonPopover,
   IonPage,
   IonRow,
   IonSelect,
@@ -101,27 +81,18 @@ import VueCal from "vue-cal";
 import "vue-cal/dist/vuecal.css";
 import {defineComponent} from "vue";
 import Course from "../components/Course";
-import AddAssignment from "@/components/AddAssignment";
-import AddCourse from "@/components/AddCourse";
-import AddTestQuiz from "@/components/AddTestQuiz";
 
 import {events, courses} from "@/database/db";
 
 export default defineComponent({
   components: {
-    AddAssignment,
-    AddCourse,
-    AddTestQuiz,
     Course,
-    IonFab,
-    IonFabButton,
     IonChip,
     IonCol,
     IonContent,
     IonHeader,
     IonIcon,
     IonLabel,
-    IonPopover,
     IonPage,
     IonRow,
     IonSelect,
@@ -150,33 +121,10 @@ export default defineComponent({
         component: Course,
         componentProps: {
           course: this.course,
-          closeCourse: () => {
-            modalController.dismiss();
-            this.viewCourse = false;
-          }
+          closeCourse: () => {modalController.dismiss(); this.viewCourse = false;}
         },
       });
       return modal.present();
-    },
-    closeAdd() {
-      this.openAdd = false;
-      this.addType = "";
-    },
-    openAddType(type) {
-      this.openAdd = false;
-      this.addType = type;
-    },
-    addAssignment(assignment) {
-      this.closeAdd();
-      this.events.push(assignment);
-    },
-    addCourse(course) {
-      this.closeAdd();
-      this.courses.push(course);
-    },
-    addTestQuiz(testquiz) {
-      this.closeAdd();
-      this.events.push(testquiz);
     },
   },
   setup() {
@@ -188,8 +136,6 @@ export default defineComponent({
       events: events,
       courses: courses,
       viewCourse: false,
-      openAdd: false,
-      addType: "",
     };
   },
 });
