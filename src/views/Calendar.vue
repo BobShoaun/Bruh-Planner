@@ -50,12 +50,14 @@
         </vue-cal>
       </ion-row>
       <ion-row>
-        <ion-chip v-for="course in courses" :key="course.name" :class="course.name">
+        <ion-chip v-on:click="openCourse(course)" @click="openModal" v-for="course in courses" :key="course.name"
+                  :class="course.name">
           {{ course.name }}
         </ion-chip>
       </ion-row>
     </ion-content>
   </ion-page>
+  <Course v-if="viewCourse === true" :event="this.course"/>
 </template>
 
 <script>
@@ -72,23 +74,19 @@ import {
   IonSelectOption,
   IonTitle,
   IonToolbar,
+  modalController,
 } from "@ionic/vue";
 import {addOutline, helpCircleOutline} from "ionicons/icons";
 import VueCal from "vue-cal";
 import "vue-cal/dist/vuecal.css";
 import {defineComponent} from "vue";
+import Course from "../components/Course";
 
 import {events, courses} from "@/database/db";
 
 export default defineComponent({
-  data() {
-    return {
-      showCourse: "all",
-      events: events,
-      courses: courses,
-    };
-  },
   components: {
+    Course,
     IonChip,
     IonCol,
     IonContent,
@@ -113,9 +111,31 @@ export default defineComponent({
           this.events = events.filter((e) => e.class === course);
       }
     },
+    openCourse(course) {
+      this.viewCourse = true;
+      this.course = course;
+    },
+    async openModal() {
+      const modal = await modalController.create({
+        component: Course,
+        componentProps: {
+          course: this.course,
+          closeCourse: () => modalController.dismiss(),
+        },
+      });
+      return modal.present();
+    },
   },
   setup() {
     return {addOutline, helpCircleOutline};
+  },
+  data() {
+    return {
+      showCourse: "all",
+      events: events,
+      courses: courses,
+      viewCourse: false,
+    };
   },
 });
 </script>

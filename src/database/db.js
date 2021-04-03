@@ -56,12 +56,12 @@ export const events = [
 export const courses = [
     {
         name: "EAS120",
-        professor: "",
-        notes: "",
+        professor: "Yasuyo Tomita",
+        notes: "Link to all the course material is here https://q.utoronto.ca/courses/182928",
     },
     {
         name: "CSB201",
-        professor: "",
+        professor: "Melody Neumann",
         notes: "",
     },
 ];

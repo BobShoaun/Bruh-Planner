@@ -28,8 +28,11 @@
       {{ event.reminder }}
     </ion-item>
     <ion-item>
-      <ion-label>Notes:</ion-label>
-      {{ event.notes }}
+      <ion-label position="stacked" style="font-size: 17px;">Notes:</ion-label>
+      <ion-textarea
+          readonly>
+        {{ event.notes }}
+      </ion-textarea>
     </ion-item>
 
     <ion-list class="buttons">

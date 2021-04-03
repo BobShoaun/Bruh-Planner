@@ -1,5 +1,5 @@
 <template>
-  <ion-item v-on:click="showEvent('course')" @click="openModal">
+  <ion-item v-on:click="showEvent(true)" @click="openModal">
     <ion-reorder slot="start"></ion-reorder>
     <ion-label class="ion-text-wrap">
       <ion-row>
@@ -45,7 +45,7 @@
       </div>
     </ion-label>
   </ion-item>
-  <Event v-if="eventType === 'course'" :event="this.event"/>
+  <Event v-if="openEvent === true" :event="this.event"/>
 </template>
 
 <script>
@@ -93,7 +93,7 @@ export default defineComponent({
       return modal.present();
     },
     showEvent(type) {
-      this.eventType = type;
+      this.openEvent = type;
     },
     calcProgress(e) {
       const progress = e;
@@ -133,7 +133,7 @@ export default defineComponent({
   },
   data() {
     return {
-      eventType: "",
+      openEvent: false,
     };
   },
 });
