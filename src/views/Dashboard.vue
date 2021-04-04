@@ -3,24 +3,24 @@
     <ion-content>
       <ion-tabs>
         <ion-tab-bar slot="bottom">
-          <ion-tab-button tab="calendar" href="/dashboard/calendar">
+          <ion-tab-button tab="calendar" href="/dashboard/calendar" @click="showButton = !showButton">
             <ion-icon :icon="calendarOutline"/>
             <ion-label>Calendar</ion-label>
           </ion-tab-button>
 
-          <ion-tab-button tab="list" href="/dashboard/list">
+          <ion-tab-button tab="list" href="/dashboard/list" @click="showButton = !showButton">
             <ion-icon :icon="createOutline"/>
             <ion-label>Todo List</ion-label>
           </ion-tab-button>
         </ion-tab-bar>
       </ion-tabs>
-
-      <ion-fab class="floating-button" vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button @click="openAdd = !openAdd">
-          <ion-icon :icon="addOutline"/>
-        </ion-fab-button>
-      </ion-fab>
-
+      <div v-if="showButton">
+        <ion-fab class="floating-button" vertical="bottom" horizontal="end" slot="fixed">
+          <ion-fab-button @click="openAdd = !openAdd">
+            <ion-icon :icon="addOutline"/>
+          </ion-fab-button>
+        </ion-fab>
+      </div>
       <ion-popover :is-open="openAdd" :backdropDismiss="false" :translucent="true">
         <ion-content class="ion-padding no-scroll">
           <ion-list>
@@ -86,7 +86,15 @@ export default {
       courses: courses,
       openAdd: false,
       addType: "",
+      showButton: true,
     };
+  },
+  mounted: function () {
+    if (window.location.href.includes("calendar")) {
+      this.showButton = true;
+    } else {
+      this.showButton = false;
+    }
   },
   methods: {
     closeAdd() {

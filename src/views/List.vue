@@ -144,6 +144,7 @@ export default defineComponent({
     };
   },
   ionViewDidEnter() {
+    this.showTasks = "upcoming";
     const filteredEvents = this.events.filter((e) => e.type === "testquiz" || e.type === "assignment");
     this.upcomingEvents = filteredEvents.filter((event) => {
       return event.completed != event.estTime;
