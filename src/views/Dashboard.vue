@@ -40,6 +40,7 @@
 
 <script>
 import {
+  alertController,
   IonContent,
   IonFab,
   IonFabButton,
@@ -111,11 +112,79 @@ export default {
     },
     addCourse(course) {
       this.closeAdd();
-      this.courses.push(course);
+      const conflict = this.checkCourseConflict(course.name);
+      if (conflict){
+        const response = this.presentAlert("Name Conflict", "There is already a course with that name!");
+        if (response === "add"){
+          console.log("adding course anyway")
+          this.events.push(course);
+        }
+      }
+      else{
+        this.events.push(course);
+      }
     },
     addTestQuiz(testquiz) {
       this.closeAdd();
-      this.events.push(testquiz);
+      const conflict = this.hasEventConflict(testquiz.start, testquiz.end);
+      if (conflict) {
+        const response = this.presentAlert("Event Conflict", "There is an event conflict with " + 
+        conflict.class + " " + conflict.title + "!");
+        if (response === "add"){
+          console.log("adding test anyway")
+          this.events.push(testquiz);
+        }
+      }
+      else {
+        this.events.push(testquiz);
+      }
+    },
+    hasEventConflict(start, end) {
+      let conflict = null; 
+      const startDate = new Date(start);
+      const endDate = new Date(end);
+      console.log(start, "to", end)
+      console.log(startDate, "to", endDate)
+      this.events.forEach(event => {
+        const eventStart = new Date(event.start);
+        const eventEnd = new Date(event.end);
+        if (event.type === "testquiz" && !((eventStart >= endDate && eventEnd >= endDate) 
+        || (eventStart <= startDate && eventEnd <= startDate))){
+          conflict = event;
+        }
+      });
+      return conflict;
+    },
+    hasCourseConflict(name) {
+      let conflict = null; 
+      this.testevents.forEach(course => {
+        if (course.name === name){
+          conflict = course;
+        }
+      });
+      return conflict;
+    },
+    async presentAlert(header, message) {
+      const alert = await alertController.create({
+        header: header,
+        message: message,
+        buttons: [
+          {
+            text: "Cancel",
+            role: "cancel",
+            handler: () => {
+              return("cancel");
+            },
+          },
+          {
+            text: "Add Anyway",
+            handler: () => {
+              return("add");
+            },
+          },
+        ],
+      });
+      return alert.present();
     },
   },
   setup() {
