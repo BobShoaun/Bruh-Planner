@@ -8,23 +8,27 @@
             <h1>{{ event.title }}</h1>
           </ion-text>
         </ion-col>
-        <ion-col> Due <span ref="dueDate"></span></ion-col>
+        <ion-col>
+          <ion-text color="secondary">
+            <h2 style="float: right;">{{ event.class }}</h2>
+          </ion-text>
+        </ion-col>
       </ion-row>
       <ion-row>
         <ion-col size="8">
-          <ion-text color="secondary">
-            <h2>{{ event.class }}</h2>
-          </ion-text>
+          <p>Weight: {{ event.weight }}%</p>
         </ion-col>
         <ion-col>
-          <p>Weight: {{ event.weight }}%</p>
+          <ion-text color="tertiary">
+            <p style="float: right;">Due <span ref="dueDate"></span></p>
+          </ion-text>
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col size="10">
-          <p v-if="this.event.completed === this.event.estTime">Time Taken:</p>
-          <p v-else>Estimated Time Remaining:</p>
-          <p><span ref="estHrs"></span> hours <span ref="estMins"></span> minutes</p>
+        <ion-col size="12">
+          <p v-if="this.event.completed === this.event.estTime">Time Taken: <span ref="estHrs"></span> hrs<span
+              ref="estMins"></span> mins</p>
+          <p v-else>Estimated Time Remaining: <span ref="estHrs"></span> hrs <span ref="estMins"></span> mins</p>
         </ion-col>
       </ion-row>
       <div v-if="this.event.completed !== this.event.estTime">
@@ -34,7 +38,6 @@
             min="0"
             :value="this.event.completed * 60"
             :max="this.event.estTime * 60"
-            step="15"
             snaps="true"
             ticks="false"
             @ionChange="calcProgress($event.detail.value)"
