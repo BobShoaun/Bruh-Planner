@@ -5,7 +5,7 @@
       <ion-row>
         <ion-col size="8">
           <ion-text color="primary">
-            <h1>{{ event.title }}</h1>
+            <h1>{{ number }}. {{ event.title }}</h1>
           </ion-text>
         </ion-col>
         <ion-col>
@@ -26,7 +26,7 @@
       </ion-row>
       <ion-row>
         <ion-col size="12">
-          <p v-if="this.event.completed === this.event.estTime">Time Taken: <span ref="estHrs"></span> hrs<span
+          <p v-if="this.event.completed === this.event.estTime">Time Taken: <span ref="estHrs"></span> hrs <span
               ref="estMins"></span> mins</p>
           <p v-else>Estimated Time Remaining: <span ref="estHrs"></span> hrs <span ref="estMins"></span> mins</p>
         </ion-col>
@@ -72,6 +72,9 @@ export default defineComponent({
   props: {
     event: {
       type: Object,
+    },
+    number: {
+      type: Number,
     },
   },
   mounted() {

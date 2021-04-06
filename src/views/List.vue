@@ -42,18 +42,19 @@
               v-on:updateCompletion="updateCompletion(event, $event)"
               :key="index"
               :event="event"
+              :number="index+1"
           />
         </ion-reorder-group>
-        <ion-list class="tasks-end">
-          <div v-if="upcomingEvents.length === 0">
+        <ion-list v-if="upcomingEvents.length === 0" class="tasks-end">
+          <div>
             No more tasks! 😊
           </div>
         </ion-list>
       </div>
       <div v-else>
         <ListItem v-for="(event, index) in pastEvents" :key="index" :event="event"/>
-        <ion-list class="tasks-end">
-          <div v-if="pastEvents.length === 0">
+        <ion-list v-if="pastEvents.length === 0" class="tasks-end">
+          <div>
             Nothing here yet! 🤩
           </div>
         </ion-list>
