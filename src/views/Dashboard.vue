@@ -91,11 +91,7 @@ export default {
     };
   },
   mounted: function () {
-    if (window.location.href.includes("calendar")) {
-      this.showButton = true;
-    } else {
-      this.showButton = false;
-    }
+    this.showButton = window.location.href.includes("calendar");
   },
   methods: {
     closeAdd() {

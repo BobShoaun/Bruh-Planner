@@ -5,7 +5,12 @@
       <ion-row>
         <ion-col size="8">
           <ion-text color="primary">
-            <h1>{{ number }}. {{ event.title }}</h1>
+            <h1 v-if="this.event.completed === this.event.estTime">
+              {{ event.title }}
+            </h1>
+            <h1 v-else>
+              {{ number }}. {{ event.title }}
+            </h1>
           </ion-text>
         </ion-col>
         <ion-col>
