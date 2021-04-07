@@ -111,9 +111,8 @@ export default {
       if (conflict) {
         this.presentCourseConflict();
       } else {
-        this.events.push(course);
+        this.courses.push(course);
       }
-      this.events.push(course);
     },
     addTestQuiz(testquiz) {
       this.closeAdd();
@@ -123,16 +122,18 @@ export default {
       } else {
         this.events.push(testquiz);
       }
-      this.events.push(testquiz);
     },
     hasEventConflict(start, end) {
       let conflict = null;
       const startDate = new Date(start);
       const endDate = new Date(end);
-      this.events.forEach(event => {
+      this.events.forEach((event) => {
         const eventStart = new Date(event.start);
         const eventEnd = new Date(event.end);
-        if (event.type === "testquiz" && (startDate < eventStart && endDate > eventStart) || (startDate >= eventStart && startDate < eventEnd)) {
+        if (
+            (event.type === "testquiz" && startDate < eventStart && endDate > eventStart) ||
+            (startDate >= eventStart && startDate < eventEnd)
+        ) {
           conflict = event;
         }
       });
@@ -140,7 +141,7 @@ export default {
     },
     hasCourseConflict(name) {
       let conflict = null;
-      this.courses.forEach(course => {
+      this.courses.forEach((course) => {
         if (course.name.toLowerCase() === name.toLowerCase()) {
           conflict = course;
         }
