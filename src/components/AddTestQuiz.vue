@@ -127,7 +127,7 @@ export default defineComponent({
     },
     addTestQuiz() {
       const startTime = new Date(this.startDate).format("YYYY-MM-DD HH:mm");
-      const endTime = new Date(this.endDate).format("YYYY-MM-DD HH:mm");
+      const endTime = startTime.split(" ")[0] + new Date(this.endDate).format(" HH:mm");
       const testquiz = {
         start: startTime,
         end: endTime,
@@ -147,10 +147,10 @@ export default defineComponent({
         this.presentAlert("Empty Fields 😒", "Please fill in all the required fields! 🥺");
         return;
       }
-      // if (startTime >= endTime) {
-      //   this.presentAlert("Invalid Time 😒", "Your test shouldn't end before it even starts! 🤔");
-      //   return;
-      // }
+      if (startTime >= endTime) {
+        this.presentAlert("Invalid Time 😒", "Your test shouldn't end before it even starts! 🤔");
+        return;
+      }
       if (testquiz.weight < 0 || testquiz.weight > 100) {
         this.presentAlert("Invalid Weight 😒", "Please enter a valid weight between 0 to 100%! 🥺");
         return;

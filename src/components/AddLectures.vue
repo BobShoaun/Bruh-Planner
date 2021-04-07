@@ -99,7 +99,7 @@ export default defineComponent({
     },
     addLectures() {
       const startTime = new Date(this.startDate).format("YYYY-MM-DD HH:mm");
-      const endTime = new Date(this.endDate).format("YYYY-MM-DD HH:mm");
+      const endTime = startTime.split(" ")[0] + new Date(this.endDate).format(" HH:mm");
       const lecture = {
         start: startTime,
         end: endTime,
