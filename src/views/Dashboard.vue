@@ -7,7 +7,6 @@
             <ion-icon :icon="calendarOutline"/>
             <ion-label>Calendar</ion-label>
           </ion-tab-button>
-
           <ion-tab-button tab="list" href="/dashboard/list" @click="showButton = !showButton">
             <ion-icon :icon="createOutline"/>
             <ion-label>Todo List</ion-label>
@@ -108,77 +107,70 @@ export default {
     },
     addCourse(course) {
       this.closeAdd();
-      const conflict = this.checkCourseConflict(course.name);
-      if (conflict){
-        const response = this.presentAlert("Name Conflict", "There is already a course with that name!");
-        if (response === "add"){
-          console.log("adding course anyway")
-          this.events.push(course);
-        }
-      }
-      else{
+      const conflict = this.hasCourseConflict(course.name);
+      if (conflict) {
+        this.presentCourseConflict();
+      } else {
         this.events.push(course);
       }
+      this.events.push(course);
     },
     addTestQuiz(testquiz) {
       this.closeAdd();
       const conflict = this.hasEventConflict(testquiz.start, testquiz.end);
       if (conflict) {
-        const response = this.presentAlert("Event Conflict", "There is an event conflict with " + 
-        conflict.class + " " + conflict.title + "!");
-        if (response === "add"){
-          console.log("adding test anyway")
-          this.events.push(testquiz);
-        }
-      }
-      else {
+        this.presentEventConflict(conflict, testquiz);
+      } else {
         this.events.push(testquiz);
       }
+      this.events.push(testquiz);
     },
     hasEventConflict(start, end) {
-      let conflict = null; 
+      let conflict = null;
       const startDate = new Date(start);
       const endDate = new Date(end);
-      console.log(start, "to", end)
-      console.log(startDate, "to", endDate)
       this.events.forEach(event => {
         const eventStart = new Date(event.start);
         const eventEnd = new Date(event.end);
-        if (event.type === "testquiz" && !((eventStart >= endDate && eventEnd >= endDate) 
-        || (eventStart <= startDate && eventEnd <= startDate))){
+        if (event.type === "testquiz" && (startDate < eventStart && endDate > eventStart) || (startDate >= eventStart && startDate < eventEnd)) {
           conflict = event;
         }
       });
       return conflict;
     },
     hasCourseConflict(name) {
-      let conflict = null; 
-      this.testevents.forEach(course => {
-        if (course.name === name){
+      let conflict = null;
+      this.courses.forEach(course => {
+        if (course.name.toLowerCase() === name.toLowerCase()) {
           conflict = course;
         }
       });
       return conflict;
     },
-    async presentAlert(header, message) {
+    async presentEventConflict(conflict, testquiz) {
       const alert = await alertController.create({
-        header: header,
-        message: message,
+        header: "Event Conflict",
+        message: "There is an event conflict with " + conflict.class + " " + conflict.title + "!",
         buttons: [
           {
             text: "Cancel",
             role: "cancel",
-            handler: () => {
-              return("cancel");
-            },
           },
           {
             text: "Add Anyway",
             handler: () => {
-              return("add");
+              this.events.push(testquiz);
             },
           },
         ],
+      });
+      return alert.present();
+    },
+    async presentCourseConflict() {
+      const alert = await alertController.create({
+        header: "Name Conflict",
+        message: "There is already a course with that name!",
+        buttons: ["Got it!"],
       });
       return alert.present();
     },
