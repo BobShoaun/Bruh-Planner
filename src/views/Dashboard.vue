@@ -59,7 +59,7 @@ import {addOutline} from "ionicons/icons";
 import AddAssignment from "@/components/AddAssignment";
 import AddCourse from "@/components/AddCourse";
 import AddTestQuiz from "@/components/AddTestQuiz";
-import {events, courses} from "@/database/db";
+import {events, courses, coursePriorities} from "@/database/db";
 
 export default {
   name: "Dashboard",
@@ -84,6 +84,7 @@ export default {
     return {
       events: events,
       courses: courses,
+      coursePriorities: coursePriorities,
       openAdd: false,
       addType: "",
       showButton: true,
@@ -111,6 +112,7 @@ export default {
       if (conflict) {
         this.presentCourseConflict();
       } else {
+        this.coursePriorities.push(course.name)
         this.courses.push(course);
       }
     },

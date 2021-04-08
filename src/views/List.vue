@@ -33,9 +33,12 @@
       </div>
       <div v-if="upcoming">
         <ion-list class="button">
-          <ion-button color="tertiary" expand="block">Custom Sort</ion-button>
+          <ion-button color="tertiary" expand="block"
+          
+          v-on:click="showCustomSortSettings();">Custom Sort</ion-button>
+                    
         </ion-list>
-        <ion-reorder-group @ionItemReorder="reorderPriority($event)" :disabled="false">
+        <ion-reorder-group @ionItemReorder="manualReorderPriority($event)" :disabled="false">
           <ListItem
               v-for="(event, index) in upcomingEvents"
               v-on:complete="completeEvent(event)"
@@ -50,6 +53,9 @@
             No more tasks! 😊
           </div>
         </ion-list>
+          <ion-content class="ion-padding no-scroll">
+            <CustomSortSettings v-if="customSortSettings"/>
+          </ion-content>
       </div>
       <div v-else>
         <ListItem v-for="(event, index) in pastEvents" :key="index" :event="event"/>
@@ -78,10 +84,12 @@ import {
   IonSelectOption,
   IonTitle,
   IonToolbar,
+  modalController,
 } from "@ionic/vue";
 import {defineComponent} from "vue";
 import ListItem from "../components/ListItem.vue";
-import {events} from "@/database/db";
+import {coursePriorities, priorities, events} from "@/database/db";
+import CustomSortSettings from "@/components/CustomSortSettings.vue"
 
 export default defineComponent({
   components: {
@@ -99,6 +107,7 @@ export default defineComponent({
     IonTitle,
     IonToolbar,
     ListItem,
+    CustomSortSettings,
   },
   methods: {
     filterTasks(type) {
@@ -119,8 +128,11 @@ export default defineComponent({
     updateCompletion(event, progress) {
       event.completed = progress / 60;
     },
-    async reorderPriority(e: CustomEvent) {
+    manualReorderPriority(e: CustomEvent) {
       this.upcomingEvents = e.detail.complete(this.upcomingEvents);
+      this.updateDatabase();
+    },
+    async updateDatabase() {
       this.events.splice(0);
       const otherEvents = this.events.filter((e) => e.type != "testquiz" && e.type != "assignment");
       otherEvents.forEach((e) => {
@@ -134,14 +146,72 @@ export default defineComponent({
       });
       await this.updateComponent();
     },
+    async showCustomSortSettings() {
+      const modal = await modalController.create({
+        component: CustomSortSettings,
+        componentProps: {
+          closeSettings: () => {
+            modalController.dismiss();
+            this.customSortSettings = false;
+          },
+          sortBySettings: this.customSort,
+        },
+      });
+      return modal.present();
+    },
+    async customSort(priorities, coursePriorities) {
+
+      console.log(priorities)
+      console.log(coursePriorities)
+
+      console.log(this.priorities)
+      console.log(this.coursePriorities)
+
+      // update priority categories
+      this.priorities.splice(0);
+      priorities.forEach(category => {
+        this.priorities.push(category);
+      }); 
+
+      this.coursePriorities.splice(0);
+      coursePriorities.forEach(course => {
+        this.coursePriorities.push(course);
+      }); 
+      this.upcomingEvents.forEach(event => {
+        event.priorityScore = this.getScore(event)
+      });
+      // sort list items
+      this.upcomingEvents.sort(function(a,b){return a.priorityScore - b.priorityScore})
+      this.updateDatabase();
+      await this.updateComponent();
+      console.log("----------")
+      console.log(priorities)
+      console.log(coursePriorities)
+
+      console.log(this.priorities)
+      console.log(this.coursePriorities)
+    },
+    getScore(event) {
+      const daysUntilDue = Math.abs(new Date(event.start).valueOf() - new Date().valueOf())/86400000
+      // lower score = higher priority
+      const score = 5/event.estTime * (4-priorities.indexOf("Estimated Time")) 
+      + daysUntilDue/5 * (4-priorities.indexOf("Due Date")) 
+      + coursePriorities.length/2 * (4-coursePriorities.indexOf(event.class)) * (4-priorities.indexOf("Course")) 
+      + 20/event.weight * (4-priorities.indexOf("Weight"));
+      return score;
+    },
+
   },
   data() {
     return {
       showTasks: "upcoming",
+      customSortSettings: false,
       events: events,
       upcomingEvents: [],
       pastEvents: [],
       upcoming: true,
+      coursePriorities: coursePriorities,
+      priorities: priorities,
     };
   },
   ionViewDidEnter() {

@@ -196,6 +196,7 @@ export default defineComponent({
     reminder: "never",
     notes: "",
     courses: courses,
+    priorityScore: 1000000,
   }),
 });
 </script>

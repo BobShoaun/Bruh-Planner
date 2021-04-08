@@ -136,6 +136,7 @@ export default defineComponent({
         reminder: this.reminder,
         notes: this.notes,
         completed: 0,
+        priorityScore: 1000000,
       };
       const estTimeHrs = Number(this.estTimeHrs);
       const estTimeMins = Number(this.estTimeMins);

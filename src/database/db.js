@@ -11,6 +11,7 @@ export const events = [
         reminder: "never",
         notes: "ez game",
         completed: 10,
+        priorityScore: 0,
     },
     {
         start: "2021-04-07 9:00",
@@ -22,8 +23,9 @@ export const events = [
         estTime: 0.5,
         repeat: "never",
         reminder: "never",
-        notes: "covers lectures up to lesson 6",
+        notes: "covers lectures up to lesson 12",
         completed: 0,
+        priorityScore: 0,
     },
     {
         start: "2021-04-19 16:00",
@@ -37,6 +39,7 @@ export const events = [
         reminder: "never",
         notes: "START IT EARLY!!",
         completed: 2,
+        priorityScore: 0,
     },
     {
         start: "2021-04-28 15:00",
@@ -50,6 +53,21 @@ export const events = [
         reminder: "never",
         notes: "",
         completed: 0,
+        priorityScore: 0,
+    },
+    {
+        start: "2021-04-02 9:00",
+        end: "2021-04-02 11:00",
+        title: "Test",
+        class: "CSB201",
+        type: "testquiz",
+        weight: 5,
+        estTime: 0.5,
+        repeat: "never",
+        reminder: "never",
+        notes: "covers lectures up to lesson 6",
+        completed: 0,
+        priorityScore: 0,
     },
 ];
 
@@ -65,3 +83,15 @@ export const courses = [
         notes: "",
     },
 ];
+
+export const priorities = [
+    "Due Date",
+    "Estimated Time",
+    "Course",
+    "Weight",
+]
+
+export const coursePriorities = [
+    "EAS120",
+    "CSB201",
+]

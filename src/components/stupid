@@ -1,0 +1,70 @@
+<template>
+  <ion-content :fullscreen="true">
+    hi
+    <!-- <ion-header>
+      <ion-toolbar>
+        <ion-title>Custom Sort</ion-title>
+      </ion-toolbar>
+    </ion-header> -->
+  </ion-content>
+  <!-- <ion-content :fullscreen="true">
+    <ion-reorder-group @ionItemReorder="updatePriorities($event)">
+      <SortCategory
+          v-for="(category, index) in priorities"
+          v-on:updateCoursePriorities="updateCoursePriorities"
+          :key="index"
+          :name="category"
+          :number="index+1"
+      />
+    </ion-reorder-group>
+  </ion-content>
+  <ion-list class="buttons">
+    <ion-button fill="outline" v-on:click="$emit('close')">Cancel</ion-button>
+    <ion-button fill="solid" v-on:click="$emit('sort', priorities, coursePriorities)">Sort Todo List</ion-button>
+  </ion-list> -->
+</template>
+
+<script lang="ts">
+import {
+  alertController,
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/vue";
+import {defineComponent} from "vue";
+import { priorities } from "@/database/db";
+
+export default defineComponent({
+  name: "CustomSort",
+  components: {
+    IonContent,
+    // IonHeader,
+    // IonTitle,
+    // IonToolbar,
+  },
+  methods: {
+    updatePriorities(e: CustomEvent) {
+      this.priorities = e.detail.complete(this.priorities); 
+      // does this change db priorities? i hope not
+    },
+    updateCoursePriorities(e: CustomEvent) {
+      this.coursePriorities = e.detail.complete(this.coursePriorities);
+    }
+  },
+  data: () => ({
+    priorities: priorities,
+  }),
+});
+</script>
+
+<style scoped>
+textarea {
+  resize: none;
+}
+
+.buttons {
+  padding-top: 5vh;
+  text-align: center;
+}
+</style>
