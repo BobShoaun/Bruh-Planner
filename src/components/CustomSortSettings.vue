@@ -11,7 +11,7 @@
           v-on:updateCoursePriorities="updateCoursePriorities"
           :key="index"
           :name="category"
-          :number="index+1"
+          :number="index + 1"
       />
     </ion-reorder-group>
     <ion-list class="buttons">
@@ -22,17 +22,9 @@
 </template>
 
 <script lang="ts">
-import {
-  IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
-  IonReorderGroup,
-  IonList,
-  IonButton,
-} from "@ionic/vue";
+import {IonContent, IonHeader, IonTitle, IonToolbar, IonReorderGroup, IonList, IonButton} from "@ionic/vue";
 import {defineComponent} from "vue";
-import { coursePriorities, priorities } from "@/database/db";
+import {coursePriorities, priorities} from "@/database/db";
 import SortCategory from "@/components/SortCategory.vue";
 
 export default defineComponent({
@@ -60,7 +52,7 @@ export default defineComponent({
       this.sortBySettings(this.priorities, this.coursePriorities);
     },
     updatePriorities(e: CustomEvent) {
-      this.priorities = e.detail.complete(this.priorities); 
+      this.priorities = e.detail.complete(this.priorities);
       // does this change db priorities? i hope not
     },
     updateCoursePriorities(coursePriorities) {

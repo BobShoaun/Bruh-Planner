@@ -33,10 +33,9 @@
       </div>
       <div v-if="upcoming">
         <ion-list class="button">
-          <ion-button color="tertiary" expand="block"
-          
-          v-on:click="showCustomSortSettings();">Custom Sort</ion-button>
-                    
+          <ion-button color="tertiary" expand="block" v-on:click="showCustomSortSettings()"
+          >Custom Sort
+          </ion-button>
         </ion-list>
         <ion-reorder-group @ionItemReorder="manualReorderPriority($event)" :disabled="false">
           <ListItem
@@ -45,7 +44,7 @@
               v-on:updateCompletion="updateCompletion(event, $event)"
               :key="index"
               :event="event"
-              :number="index+1"
+              :number="index + 1"
           />
         </ion-reorder-group>
         <ion-list v-if="upcomingEvents.length === 0" class="tasks-end">
@@ -53,9 +52,9 @@
             No more tasks! 😊
           </div>
         </ion-list>
-          <ion-content class="ion-padding no-scroll">
-            <CustomSortSettings v-if="customSortSettings"/>
-          </ion-content>
+        <ion-content class="ion-padding no-scroll">
+          <CustomSortSettings v-if="customSortSettings"/>
+        </ion-content>
       </div>
       <div v-else>
         <ListItem v-for="(event, index) in pastEvents" :key="index" :event="event"/>
@@ -89,7 +88,7 @@ import {
 import {defineComponent} from "vue";
 import ListItem from "../components/ListItem.vue";
 import {coursePriorities, priorities, events} from "@/database/db";
-import CustomSortSettings from "@/components/CustomSortSettings.vue"
+import CustomSortSettings from "@/components/CustomSortSettings.vue";
 
 export default defineComponent({
   components: {
@@ -160,47 +159,50 @@ export default defineComponent({
       return modal.present();
     },
     async customSort(priorities, coursePriorities) {
+      console.log(priorities);
+      console.log(coursePriorities);
 
-      console.log(priorities)
-      console.log(coursePriorities)
-
-      console.log(this.priorities)
-      console.log(this.coursePriorities)
+      console.log(this.priorities);
+      console.log(this.coursePriorities);
 
       // update priority categories
       this.priorities.splice(0);
-      priorities.forEach(category => {
+      priorities.forEach((category) => {
         this.priorities.push(category);
-      }); 
+      });
 
       this.coursePriorities.splice(0);
-      coursePriorities.forEach(course => {
+      coursePriorities.forEach((course) => {
         this.coursePriorities.push(course);
-      }); 
-      this.upcomingEvents.forEach(event => {
-        event.priorityScore = this.getScore(event)
+      });
+      this.upcomingEvents.forEach((event) => {
+        event.priorityScore = this.getScore(event);
       });
       // sort list items
-      this.upcomingEvents.sort(function(a,b){return a.priorityScore - b.priorityScore})
-      this.updateDatabase();
+      this.upcomingEvents.sort(function (a, b) {
+        return a.priorityScore - b.priorityScore;
+      });
+      await this.updateDatabase();
       await this.updateComponent();
-      console.log("----------")
-      console.log(priorities)
-      console.log(coursePriorities)
+      console.log("----------");
+      console.log(priorities);
+      console.log(coursePriorities);
 
-      console.log(this.priorities)
-      console.log(this.coursePriorities)
+      console.log(this.priorities);
+      console.log(this.coursePriorities);
     },
     getScore(event) {
-      const daysUntilDue = Math.abs(new Date(event.start).valueOf() - new Date().valueOf())/86400000
+      const daysUntilDue = Math.abs(new Date(event.start).valueOf() - new Date().valueOf()) / 86400000;
       // lower score = higher priority
-      const score = 5/event.estTime * (4-priorities.indexOf("Estimated Time")) 
-      + daysUntilDue/5 * (4-priorities.indexOf("Due Date")) 
-      + coursePriorities.length/2 * (4-coursePriorities.indexOf(event.class)) * (4-priorities.indexOf("Course")) 
-      + 20/event.weight * (4-priorities.indexOf("Weight"));
+      const score =
+          (5 / event.estTime) * (4 - priorities.indexOf("Estimated Time")) +
+          (daysUntilDue / 5) * (4 - priorities.indexOf("Due Date")) +
+          (coursePriorities.length / 2) *
+          (4 - coursePriorities.indexOf(event.class)) *
+          (4 - priorities.indexOf("Course")) +
+          (20 / event.weight) * (4 - priorities.indexOf("Weight"));
       return score;
     },
-
   },
   data() {
     return {
